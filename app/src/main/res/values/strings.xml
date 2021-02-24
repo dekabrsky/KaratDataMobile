@@ -1,3 +1,25 @@
-<resources>
-    <string name="app_name">KaratDataMobile</string>
+﻿<resources>
+    <string name="app_name">КАРАТ-ДАТА</string>
+    <string name="eText_name_save">Имя файла (опционально)</string>
+    <string name="tView_device"> Приборы</string>
+    <string name="hourly">Почасовой</string>
+    <string name="daily">Посуточный</string>
+    <string name="monthly">Помесячный</string>
+    <string name="emergency">Аварийный</string>
+    <string name="integral">Интегральный</string>
+    <string name="protective">Защитный</string>
+    <string name="eventful">Событий</string>
+    <string-array name="spinner_array">
+        <item>306/7/8</item>
+        <item>2-213/223</item>
+    </string-array>
+    <string-array name="spinner_array_usb">
+        <item>2400</item>
+        <item>4800</item>
+        <item>9600</item>
+        <item>19200</item>
+        <item>38400</item>
+        <item>57600</item>
+        <item>115200</item>
+    </string-array>
 </resources>
