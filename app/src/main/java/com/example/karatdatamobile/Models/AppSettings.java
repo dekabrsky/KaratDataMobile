@@ -2,22 +2,24 @@ package com.example.karatdatamobile.Models;
 
 import com.example.karatdatamobile.Enums.ConnectionMode;
 
-public class ConnectionSettings {
+import java.io.Serializable;
+
+public class AppSettings implements Serializable {
     private final ConnectionMode connectionMode;
 
     // TCP Settings
     private final String port;
     private final String ip;
-    private final String Address;
+    private final String address;
 
     // USB Settings
 
 
-    public ConnectionSettings(ConnectionMode connectionMode, String port, String ip, String address) {
+    public AppSettings(ConnectionMode connectionMode, String port, String ip, String address) {
         this.connectionMode = connectionMode;
         this.port = port;
         this.ip = ip;
-        Address = address;
+        this.address = address;
     }
 
     public ConnectionMode getConnectionMode() {
@@ -33,6 +35,6 @@ public class ConnectionSettings {
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 }

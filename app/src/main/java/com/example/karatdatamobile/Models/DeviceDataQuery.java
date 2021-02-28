@@ -2,10 +2,11 @@ package com.example.karatdatamobile.Models;
 
 import com.example.karatdatamobile.Enums.ArchiveType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class DeviceDataQuery {
+public class DeviceDataQuery implements Serializable {
     private final String deviceType;
     private final Date startDate;
     private final ArrayList<ArchiveType> archiveTypes;

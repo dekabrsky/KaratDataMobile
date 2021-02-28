@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.CheckBox;
@@ -19,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.karatdatamobile.Enums.ArchiveType;
 import com.example.karatdatamobile.Enums.ConnectionMode;
-import com.example.karatdatamobile.Models.ConnectionSettings;
+import com.example.karatdatamobile.Models.AppSettings;
 import com.example.karatdatamobile.Models.DeviceDataQuery;
 
 import java.io.File;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     Spinner deviseType;
     CalendarView calendar;
 
-    CheckBox h, d, m, emer, integ, prot, event;
+    CheckBox hourly, daily, monthly, emergency, integral, protective, eventful;
 
     Button startReadDataBtn;
 
@@ -55,26 +56,26 @@ public class MainActivity extends AppCompatActivity {
         deviseType = findViewById(R.id.spinner_device);
         calendar = findViewById(R.id.calendarView);
 
-        h = findViewById(R.id.checkBox3);
-        d = findViewById(R.id.checkBox2);
-        m = findViewById(R.id.checkBox4);
-        emer = findViewById(R.id.checkBox6);
-        integ = findViewById(R.id.checkBox5);
-        prot = findViewById(R.id.checkBox8);
-        event = findViewById(R.id.checkBox7);
+        daily = findViewById(R.id.checkBox2);
+        hourly = findViewById(R.id.checkBox3);
+        monthly = findViewById(R.id.checkBox4);
+        integral = findViewById(R.id.checkBox5);
+        emergency = findViewById(R.id.checkBox6);
+        eventful = findViewById(R.id.checkBox7);
+        protective = findViewById(R.id.checkBox8);
 
         startReadDataBtn = findViewById(R.id.button_read);
 
-        settingsBtn.setOnClickListener(v -> OpenSettings());
-        openFileManagerBtn.setOnClickListener(v -> OpenFileManager());
-        startReadDataBtn.setOnClickListener(v -> StartReadData());
+        settingsBtn.setOnClickListener(this::openSettings);
+        openFileManagerBtn.setOnClickListener(this::openFileManager);
+        startReadDataBtn.setOnClickListener(this::startReadData);
     }
 
-    private void OpenSettings() {
+    private void openSettings(View view) {
         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
     }
 
-    private void OpenFileManager() {
+    private void openFileManager(View view) {
         // todo
         Intent intent = new Intent(Intent.ACTION_VIEW);
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
@@ -89,42 +90,47 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void StartReadData() {
-        DeviceDataQuery deviceDataQuery = CollectDeviceDataQuery();
-        ConnectionSettings connectionSettings = GetConnectionSettings();
+    private void startReadData(View view) {
+        DeviceDataQuery deviceDataQuery = collectDeviceDataQuery();
+        AppSettings appSettings = getAppSettings();
 
+        Intent toTerm = new Intent(MainActivity.this, TerminalActivity.class);
+        toTerm.putExtra("DeviceDataQuery", deviceDataQuery);
+        toTerm.putExtra("AppSettings", appSettings);
+
+        startActivity(toTerm);
     }
 
-    private DeviceDataQuery CollectDeviceDataQuery() {
+    private DeviceDataQuery collectDeviceDataQuery() {
         String deviceType = deviseType.getTransitionName();
         Date startDate = new Date(calendar.getDate());
         ArrayList<ArchiveType> archiveTypes = new ArrayList<>();
 
-        if (h.isChecked())
+        if (hourly.isChecked())
             archiveTypes.add(ArchiveType.HOURLY);
-        if (d.isChecked())
+        if (daily.isChecked())
             archiveTypes.add(ArchiveType.DAILY);
-        if (m.isChecked())
+        if (monthly.isChecked())
             archiveTypes.add(ArchiveType.MONTHLY);
-        if (emer.isChecked())
+        if (emergency.isChecked())
             archiveTypes.add(ArchiveType.EMERGENCY);
-        if (integ.isChecked())
+        if (integral.isChecked())
             archiveTypes.add(ArchiveType.INTEGRAL);
-        if (prot.isChecked())
+        if (protective.isChecked())
             archiveTypes.add(ArchiveType.PROTECTIVE);
-        if (event.isChecked())
+        if (eventful.isChecked())
             archiveTypes.add(ArchiveType.EVENTFUL);
 
         return new DeviceDataQuery(deviceType, startDate, archiveTypes);
     }
 
-    private ConnectionSettings GetConnectionSettings() {
+    private AppSettings getAppSettings() {
         ConnectionMode connectionMode = ConnectionMode.valueOf(
                 sharedSettings.getString("ConnectionMode", ConnectionMode.TCP.toString()));
         String ip = sharedSettings.getString("Ip", null);
         String port = sharedSettings.getString("Port", null);
         String address = sharedSettings.getString("Address", null);
 
-        return new ConnectionSettings(connectionMode, ip, port, address);
+        return new AppSettings(connectionMode, port, ip, address);
     }
 }

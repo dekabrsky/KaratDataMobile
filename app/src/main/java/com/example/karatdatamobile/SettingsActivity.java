@@ -48,8 +48,8 @@ public class SettingsActivity extends AppCompatActivity {
         usb_text = findViewById(R.id.textView_usb);
         spinner_usb = findViewById(R.id.spinner_usb);
 
-        radioTCP = (RadioButton) findViewById(R.id.TCP);
-        radioUSB = (RadioButton) findViewById(R.id.usb);
+        radioTCP = findViewById(R.id.TCP);
+        radioUSB = findViewById(R.id.usb);
 
         saveSettingsBtn.setOnClickListener(v -> SaveSettingsAdnReturn());
 
