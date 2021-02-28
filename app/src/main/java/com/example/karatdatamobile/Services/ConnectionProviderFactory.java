@@ -4,7 +4,6 @@ import com.example.karatdatamobile.Enums.ConnectionMode;
 import com.example.karatdatamobile.Interfaces.IConnectionProvider;
 import com.example.karatdatamobile.Models.AppSettings;
 import com.example.karatdatamobile.Models.TcpConnectionSettings;
-import com.example.karatdatamobile.Providers.TcpConnectionProvider;
 
 public class ConnectionProviderFactory {
 

@@ -1,23 +1,16 @@
-package com.example.karatdatamobile.Providers;
+package com.example.karatdatamobile.Services;
 
 import com.example.karatdatamobile.Models.TcpConnectionSettings;
-import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
-import com.intelligt.modbus.jlibmodbus.exception.ModbusNumberException;
-import com.intelligt.modbus.jlibmodbus.exception.ModbusProtocolException;
-import com.intelligt.modbus.jlibmodbus.master.ModbusMaster;
-import com.intelligt.modbus.jlibmodbus.master.ModbusMasterFactory;
 import com.intelligt.modbus.jlibmodbus.msg.request.ReadHoldingRegistersRequest;
+import com.intelligt.modbus.jlibmodbus.msg.request.WriteMultipleRegistersRequest;
 import com.intelligt.modbus.jlibmodbus.msg.response.ReadHoldingRegistersResponse;
 import com.intelligt.modbus.jlibmodbus.serial.SerialParameters;
 import com.intelligt.modbus.jlibmodbus.serial.SerialPort;
-import com.intelligt.modbus.jlibmodbus.serial.SerialPortException;
 import com.intelligt.modbus.jlibmodbus.serial.SerialPortFactoryTcpClient;
-import com.intelligt.modbus.jlibmodbus.serial.SerialPortFactoryTcpServer;
 import com.intelligt.modbus.jlibmodbus.serial.SerialUtils;
 import com.intelligt.modbus.jlibmodbus.tcp.TcpParameters;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class TcpConnectionProvider extends ModbusConnectionProvider<TcpConnectionSettings> {
 
@@ -39,6 +32,19 @@ public class TcpConnectionProvider extends ModbusConnectionProvider<TcpConnectio
         SerialUtils.setSerialPortFactory(new SerialPortFactoryTcpClient(tcpParameter));
 
         return serialParameter;
+    }
+
+    @Override
+    public void write(int offset, byte[] data) throws Exception {
+        WriteMultipleRegistersRequest writeRequest = new WriteMultipleRegistersRequest();
+        writeRequest.setServerAddress(settings.getSlaveId());
+        writeRequest.setStartAddress(offset);
+        writeRequest.setByteCount(data.length);
+        writeRequest.setBytes(data);
+
+        master.processRequest(writeRequest);
+
+        writeRequest.getResponse();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.karatdatamobile.Services.Parser;
+package com.example.karatdatamobile.Services;
 
 import android.util.Log;
 
@@ -8,7 +8,7 @@ import com.example.karatdatamobile.Models.DataBlockInfo;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Parser {
+public class BinaryDataParser {
     public static String parse(DataBlock dataBlock) {
 
         DataBlockInfo dataBlockInfo = dataBlock.getDataBlockInfo();

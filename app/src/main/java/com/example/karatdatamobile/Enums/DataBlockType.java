@@ -5,4 +5,5 @@ public enum DataBlockType {
     DATE_TIME,
     SERIAL_NUMBER,
     ARCHIVES_CONFIG,
+    ARCHIVE,
 }

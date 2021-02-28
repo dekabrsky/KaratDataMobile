@@ -1,13 +1,10 @@
-package com.example.karatdatamobile.Providers;
+package com.example.karatdatamobile.Services;
 
 import com.example.karatdatamobile.Interfaces.IConnectionProvider;
 import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
 import com.intelligt.modbus.jlibmodbus.master.ModbusMaster;
 import com.intelligt.modbus.jlibmodbus.master.ModbusMasterFactory;
 import com.intelligt.modbus.jlibmodbus.serial.SerialParameters;
-import com.intelligt.modbus.jlibmodbus.serial.SerialPortException;
-
-import java.net.UnknownHostException;
 
 public abstract class ModbusConnectionProvider<TSettings> implements IConnectionProvider {
 

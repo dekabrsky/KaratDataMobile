@@ -1,4 +1,4 @@
-package com.example.karatdatamobile.Services.Reader;
+package com.example.karatdatamobile.Interfaces;
 
 public interface OnErrorsListener {
     void onError(Exception e);
