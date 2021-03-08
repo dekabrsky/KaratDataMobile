@@ -2,10 +2,14 @@ package com.example.karatdatamobile.Services;
 
 import android.util.Log;
 
+import com.example.karatdatamobile.Models.ArchivesConfig;
 import com.example.karatdatamobile.Models.DataBlock;
 import com.example.karatdatamobile.Models.DataBlockInfo;
+import com.example.karatdatamobile.Models.RecordRow;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class BinaryDataParser {
@@ -21,8 +25,19 @@ public class BinaryDataParser {
             case SERIAL_NUMBER:
                 return printSerNumber(dataBlock.getData());
             default:
-                return "Can not parse type " + dataBlockInfo.getDataBlockName();
+                return null;
         }
+    }
+
+    public static String parseArchive(ArrayList<DataBlock> dataBlocks, ArchivesConfig config) {
+        StringBuilder sb = new StringBuilder();
+
+        for (DataBlock dataBlock : dataBlocks) {
+            RecordRow recordRow = new RecordRow(config, getHexContent(dataBlock.getData()));
+            sb.append(Arrays.asList(recordRow.getRowArray()).toString()).append("\n");
+        }
+
+        return sb.toString();
     }
 
     private static String printSerNumber(int[] data) {

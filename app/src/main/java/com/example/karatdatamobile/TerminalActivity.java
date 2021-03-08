@@ -13,6 +13,7 @@ import com.example.karatdatamobile.Enums.ArchiveType;
 import com.example.karatdatamobile.Enums.DataBlockType;
 import com.example.karatdatamobile.Interfaces.IConnectionProvider;
 import com.example.karatdatamobile.Models.AppSettings;
+import com.example.karatdatamobile.Models.ArchivesConfig;
 import com.example.karatdatamobile.Models.ArchivesRegisters;
 import com.example.karatdatamobile.Models.DataBlock;
 import com.example.karatdatamobile.Models.DataBlockInfo;
@@ -84,27 +85,33 @@ public class TerminalActivity extends AppCompatActivity {
         dataReader.read(baseDataBlocks);
     }
 
-    private void readArchivesConfig(BinaryDataProvider dataReader) {
-        DataBlockInfo[] baseDataBlocks = new DataBlockInfo[]{
-                DataBlockInfoPresets.ArchivesConfig(),
-        };
-
-        dataReader.read(baseDataBlocks);
-    }
-
     private void readArchives(BinaryDataProvider dataReader, DeviceDataQuery deviceDataQuery) {
         HashMap<ArchiveType, Integer> archiveRegisters = new ArchivesRegisters().getNameToCode();
+        ArchivesConfig config = getArchiveConfig(dataReader);
 
         dataReader.write(deviceDataQuery.getStartDate()); // todo
 
+        HashMap<ArchiveType, ArrayList<DataBlock>> archives = new HashMap<>();
         for (ArchiveType archiveType : deviceDataQuery.getArchiveTypes()) {
-            readArchiveByType(dataReader, archiveRegisters.get(archiveType));
+            ArrayList<DataBlock> archiveData = readArchiveByType(dataReader, archiveRegisters.get(archiveType));
+            archives.put(archiveType, archiveData);
         }
+
+        HashMap<ArchiveType, String> parsedArchives = parseArchives(archives, config);
+        writeParsedArchivesToUi(parsedArchives);
     }
 
-    private void readArchiveByType(BinaryDataProvider dataReader, int type) {
+    private ArchivesConfig getArchiveConfig(BinaryDataProvider dataReader) {
+        DataBlock dataBlock = dataReader.read(DataBlockInfoPresets.ArchivesConfig());
+        return new ArchivesConfig(getHexContent(dataBlock.getData()));
+    }
+
+    private ArrayList<DataBlock> readArchiveByType(BinaryDataProvider dataReader, int type) {
+        ArrayList<DataBlock> result = new ArrayList<>();
+
         int counter = 0;
         int next = type + 0x05;
+
         while (true) {
             int offset = counter == 0 ? type : next;
 
@@ -114,23 +121,33 @@ public class TerminalActivity extends AppCompatActivity {
             if ((String.valueOf(getHexContent(dataBlock.getData()).charAt(0)) + getHexContent(dataBlock.getData()).charAt(1)).equals("ff"))
                 break;
 
+            result.add(dataBlock);
+
             counter++;
         }
+
+        return result;
+    }
+
+    private HashMap<ArchiveType, String> parseArchives(HashMap<ArchiveType, ArrayList<DataBlock>> archives, ArchivesConfig config) {
+        HashMap<ArchiveType, String> result = new HashMap<>();
+
+        for (ArchiveType archiveType : archives.keySet()) {
+            String parsedArchive = BinaryDataParser.parseArchive(archives.get(archiveType), config);
+            result.put(archiveType, parsedArchive);
+        }
+
+        return result;
     }
 
     private void readBlockEventListener(DataBlock dataBlock) {
         dataBlocks.add(dataBlock);
 
-        String dataString = BinaryDataParser.parse(dataBlock);
-
-        writeToUi(dataBlock.getDataBlockInfo().getDataBlockName().name());
-        writeToUi("[Raw-data]: " + getHexContent(dataBlock.getData()));
-        writeToUi("[Parsed-data]: " + dataString);
-        writeToUi("------");
+        writeDataBlockToUi(dataBlock);
     }
 
     private void errorEventListener(Exception exception) {
-        writeToUi(exception.getMessage());
+        writeToUi("[Error]: " + exception.getMessage());
     }
 
     private void writeToUi(String message) {
@@ -138,5 +155,29 @@ public class TerminalActivity extends AppCompatActivity {
             messages.add(message);
             adapter.notifyDataSetChanged();
         });
+    }
+
+    private void writeDataBlockToUi(DataBlock dataBlock) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[Type]: ").append(dataBlock.getDataBlockInfo().getDataBlockName().name()).append("\n");
+        sb.append("[Raw-data]: ").append(getHexContent(dataBlock.getData())).append("\n");
+
+        String parsedData = BinaryDataParser.parse(dataBlock);
+        if (parsedData != null)
+            sb.append("[Parsed-data]: ").append(parsedData).append("\n");
+
+        writeToUi(sb.toString());
+    }
+
+    private void writeParsedArchivesToUi(HashMap<ArchiveType, String> parsedArchives) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("PARSED ARCHIVES").append("\n");
+
+        for (ArchiveType archiveType : parsedArchives.keySet()) {
+            String str = String.format("[%s]: %s", archiveType.name(), parsedArchives.get(archiveType));
+            sb.append(str).append("\n");
+        }
+
+        writeToUi(sb.toString());
     }
 }
