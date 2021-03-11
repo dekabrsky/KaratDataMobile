@@ -1,16 +1,20 @@
 package com.example.karatdatamobile.Services;
 
+import android.util.Log;
+
 import com.example.karatdatamobile.Models.TcpConnectionSettings;
-import com.intelligt.modbus.jlibmodbus.msg.request.ReadHoldingRegistersRequest;
-import com.intelligt.modbus.jlibmodbus.msg.request.WriteMultipleRegistersRequest;
-import com.intelligt.modbus.jlibmodbus.msg.response.ReadHoldingRegistersResponse;
 import com.intelligt.modbus.jlibmodbus.serial.SerialParameters;
 import com.intelligt.modbus.jlibmodbus.serial.SerialPort;
 import com.intelligt.modbus.jlibmodbus.serial.SerialPortFactoryTcpClient;
 import com.intelligt.modbus.jlibmodbus.serial.SerialUtils;
 import com.intelligt.modbus.jlibmodbus.tcp.TcpParameters;
 
-import java.net.InetAddress;
+import net.wimpi.modbus.io.ModbusRTUTCPTransaction;
+import net.wimpi.modbus.msg.ReadMultipleRegistersRequest;
+import net.wimpi.modbus.msg.ReadMultipleRegistersResponse;
+import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
+import net.wimpi.modbus.net.RTUTCPMasterConnection;
+import net.wimpi.modbus.procimg.SimpleRegister;
 
 public class TcpConnectionProvider extends ModbusConnectionProvider<TcpConnectionSettings> {
 
@@ -22,8 +26,8 @@ public class TcpConnectionProvider extends ModbusConnectionProvider<TcpConnectio
     protected SerialParameters getSerialParameters() throws Exception {
         TcpParameters tcpParameter = new TcpParameters();
 
-        tcpParameter.setHost(InetAddress.getByName(settings.getIp()));
-        tcpParameter.setPort(Integer.parseInt(settings.getPort()));
+        tcpParameter.setHost(settings.getIp());
+        tcpParameter.setPort(settings.getPort());
         tcpParameter.setKeepAlive(true);
 
         SerialParameters serialParameter = new SerialParameters();
@@ -37,27 +41,38 @@ public class TcpConnectionProvider extends ModbusConnectionProvider<TcpConnectio
     @Override
     public void write(int offset, byte[] data) throws Exception {
         WriteMultipleRegistersRequest writeRequest = new WriteMultipleRegistersRequest();
-        writeRequest.setServerAddress(settings.getSlaveId());
-        writeRequest.setStartAddress(offset);
-        writeRequest.setByteCount(data.length);
-        writeRequest.setBytes(data);
-
-        master.processRequest(writeRequest);
-
-        writeRequest.getResponse();
+        writeRequest.setReference(offset);
+        writeRequest.setRegisters(bytesToRegisters(data));
+        writeRequest.setUnitID(settings.getSlaveId());
+        ModbusRTUTCPTransaction trans = new ModbusRTUTCPTransaction((RTUTCPMasterConnection) master);
+        trans.setRequest(writeRequest);
+        trans.execute();
     }
 
     @Override
     public int[] read(int offset, int quantity) throws Exception {
-        ReadHoldingRegistersRequest readRequest = new ReadHoldingRegistersRequest();
-        readRequest.setServerAddress(settings.getSlaveId());
-        readRequest.setStartAddress(offset);
-        readRequest.setQuantity(quantity);
+        ReadMultipleRegistersRequest req = new ReadMultipleRegistersRequest(offset, quantity);
+        req.setUnitID(settings.getSlaveId());
 
-        master.processRequest(readRequest);
+        ModbusRTUTCPTransaction trans = new ModbusRTUTCPTransaction((RTUTCPMasterConnection) master);
+        trans.setRequest(req);
+        trans.execute();
+        ReadMultipleRegistersResponse res = (ReadMultipleRegistersResponse) trans.getResponse();
 
-        ReadHoldingRegistersResponse response = (ReadHoldingRegistersResponse) readRequest.getResponse();
+        int[] values = new int[quantity];
 
-        return response.getHoldingRegisters().getRegisters();
+        for (int i = 0; i < quantity; i++) {
+            values[i] = res.getRegisterValue(i);
+        }
+
+        return values;
+    }
+
+    private SimpleRegister[] bytesToRegisters(byte[] data){
+        SimpleRegister[] result = new SimpleRegister[data.length];
+        for (int i = 0; i < data.length; i++) {
+            result[i] = new SimpleRegister(data[i]);
+        }
+        return result;
     }
 }

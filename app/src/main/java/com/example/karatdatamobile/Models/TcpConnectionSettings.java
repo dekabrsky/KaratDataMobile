@@ -1,23 +1,28 @@
 package com.example.karatdatamobile.Models;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 public class TcpConnectionSettings {
-
-    private final String port;
-    private final String ip;
-
+    private final int port;
+    private InetAddress ip;
     private final int slaveId;
 
     public TcpConnectionSettings(String port, String ip, int slaveId) {
-        this.port = port;
-        this.ip = ip;
+        this.port = Integer.parseInt(port);
+        try {
+            this.ip = InetAddress.getByName(ip);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         this.slaveId = slaveId;
     }
 
-    public String getPort() {
+    public int getPort() {
         return port;
     }
 
-    public String getIp() {
+    public InetAddress getIp() {
         return ip;
     }
 

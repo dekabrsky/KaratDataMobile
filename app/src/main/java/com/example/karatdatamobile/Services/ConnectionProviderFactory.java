@@ -1,9 +1,16 @@
 package com.example.karatdatamobile.Services;
 
+import android.hardware.usb.UsbManager;
+
 import com.example.karatdatamobile.Enums.ConnectionMode;
 import com.example.karatdatamobile.Interfaces.IConnectionProvider;
 import com.example.karatdatamobile.Models.AppSettings;
 import com.example.karatdatamobile.Models.TcpConnectionSettings;
+import com.example.karatdatamobile.Models.UsbConnectionSettings;
+
+import net.wimpi.modbus.usbserial.UsbSerialParameters;
+
+import java.net.InetAddress;
 
 public class ConnectionProviderFactory {
 
@@ -14,7 +21,7 @@ public class ConnectionProviderFactory {
             case TCP:
                 return createTcpConnectionProvider(appSettings);
             case USB:
-                return null;
+                return createUsbConnectionProvider(appSettings);
         }
 
         return null;
@@ -31,5 +38,17 @@ public class ConnectionProviderFactory {
         int slaveId = Integer.parseInt(appSettings.getAddress());
 
         return new TcpConnectionSettings(port, ip, slaveId);
+    }
+
+    private static IConnectionProvider createUsbConnectionProvider(AppSettings appSettings) {
+        UsbConnectionSettings usbConnectionSettings = toUsbConnectionSettings(appSettings);
+        return new UsbConnectionProvider(usbConnectionSettings);
+    }
+
+    private static UsbConnectionSettings toUsbConnectionSettings(AppSettings appSettings) {
+        UsbSerialParameters params = appSettings.getParams();
+        UsbManager manager = appSettings.getManager();
+        int slaveId = Integer.parseInt(appSettings.getAddress());
+        return new UsbConnectionSettings(params, manager, slaveId);
     }
 }
