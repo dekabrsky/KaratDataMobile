@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.karatdatamobile.Enums.ArchiveType;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     EditText fileName;
     Spinner deviseType;
     CalendarView calendar;
+    Date startDate;
 
     CheckBox hourly, daily, monthly, emergency, integral, protective, eventful;
 
@@ -69,6 +71,16 @@ public class MainActivity extends AppCompatActivity {
         settingsBtn.setOnClickListener(this::openSettings);
         openFileManagerBtn.setOnClickListener(this::openFileManager);
         startReadDataBtn.setOnClickListener(this::startReadData);
+
+        calendar = findViewById(R.id.calendarView);
+        startDate = new Date(calendar.getDate());
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year,
+                                            int month, int dayOfMonth) {
+                startDate = new Date(year - 1900, month, dayOfMonth);
+            }
+        });
     }
 
     private void openSettings(View view) {
@@ -103,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DeviceDataQuery collectDeviceDataQuery() {
         String deviceType = deviseType.getTransitionName();
-        Date startDate = new Date(calendar.getDate());
+        //Date startDate = new Date(calendar.getDate());
+        Log.d("Start Date", String.valueOf(startDate));
         ArrayList<ArchiveType> archiveTypes = new ArrayList<>();
 
         if (hourly.isChecked())

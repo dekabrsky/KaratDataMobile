@@ -1,7 +1,5 @@
 package com.example.karatdatamobile.Services;
 
-import android.util.Log;
-
 import com.example.karatdatamobile.Models.TcpConnectionSettings;
 import com.intelligt.modbus.jlibmodbus.serial.SerialParameters;
 import com.intelligt.modbus.jlibmodbus.serial.SerialPort;
@@ -42,7 +40,7 @@ public class TcpConnectionProvider extends ModbusConnectionProvider<TcpConnectio
     public void write(int offset, byte[] data) throws Exception {
         WriteMultipleRegistersRequest writeRequest = new WriteMultipleRegistersRequest();
         writeRequest.setReference(offset);
-        writeRequest.setRegisters(bytesToRegisters(data));
+        writeRequest.setRegisters(timeBytesToRegisters(data));
         writeRequest.setUnitID(settings.getSlaveId());
         ModbusRTUTCPTransaction trans = new ModbusRTUTCPTransaction((RTUTCPMasterConnection) master);
         trans.setRequest(writeRequest);
@@ -68,11 +66,10 @@ public class TcpConnectionProvider extends ModbusConnectionProvider<TcpConnectio
         return values;
     }
 
-    private SimpleRegister[] bytesToRegisters(byte[] data){
-        SimpleRegister[] result = new SimpleRegister[data.length];
-        for (int i = 0; i < data.length; i++) {
-            result[i] = new SimpleRegister(data[i]);
-        }
+    private SimpleRegister[] timeBytesToRegisters(byte[] data){
+        SimpleRegister[] result = new SimpleRegister[2];
+        result[0] = new SimpleRegister(data[0], data[1]);
+        result[1] = new SimpleRegister(data[2], data[3]);
         return result;
     }
 }
