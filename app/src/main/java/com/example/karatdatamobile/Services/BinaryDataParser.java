@@ -7,6 +7,8 @@ import com.example.karatdatamobile.Models.DataBlock;
 import com.example.karatdatamobile.Models.DataBlockInfo;
 import com.example.karatdatamobile.Models.RecordRow;
 
+import net.wimpi.modbus.procimg.SimpleRegister;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,9 +115,17 @@ public class BinaryDataParser {
 
     private static String printModel(int[] data) {
         String t = Integer.toHexString(data[0]);
-        return t.charAt(2) +
+        String model16 = t.charAt(2) +
                 String.valueOf(t.charAt(3)) +
                 t.charAt(0) +
                 t.charAt(1);
+        return String.valueOf(Integer.parseInt(model16, 16));
+    }
+
+    public static SimpleRegister[] timeBytesToRegisters(byte[] data){
+        SimpleRegister[] result = new SimpleRegister[2];
+        result[0] = new SimpleRegister(data[0], data[1]);
+        result[1] = new SimpleRegister(data[2], data[3]);
+        return result;
     }
 }

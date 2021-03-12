@@ -88,18 +88,18 @@ public class TerminalActivity extends AppCompatActivity {
 
     private void readArchives(BinaryDataProvider dataReader, DeviceDataQuery deviceDataQuery) {
         HashMap<ArchiveType, Integer> archiveRegisters = new ArchivesRegisters().getNameToCode();
-        //ArchivesConfig config = getArchiveConfig(dataReader);
+        ArchivesConfig config = getArchiveConfig(dataReader);
 
         dataReader.write(deviceDataQuery.getStartDate()); // todo
 
-        /*HashMap<ArchiveType, ArrayList<DataBlock>> archives = new HashMap<>();
+        HashMap<ArchiveType, ArrayList<DataBlock>> archives = new HashMap<>();
         for (ArchiveType archiveType : deviceDataQuery.getArchiveTypes()) {
             ArrayList<DataBlock> archiveData = readArchiveByType(dataReader, archiveRegisters.get(archiveType));
             archives.put(archiveType, archiveData);
         }
 
         HashMap<ArchiveType, String> parsedArchives = parseArchives(archives, config);
-        writeParsedArchivesToUi(parsedArchives);*/
+        writeParsedArchivesToUi(parsedArchives);
     }
 
     private ArchivesConfig getArchiveConfig(BinaryDataProvider dataReader) {

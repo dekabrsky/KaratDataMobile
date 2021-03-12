@@ -14,6 +14,8 @@ import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
 import net.wimpi.modbus.net.RTUTCPMasterConnection;
 import net.wimpi.modbus.procimg.SimpleRegister;
 
+import static com.example.karatdatamobile.Services.BinaryDataParser.timeBytesToRegisters;
+
 public class TcpConnectionProvider extends ModbusConnectionProvider<TcpConnectionSettings> {
 
     public TcpConnectionProvider(TcpConnectionSettings tcpConnectionSettings) {
@@ -64,12 +66,5 @@ public class TcpConnectionProvider extends ModbusConnectionProvider<TcpConnectio
         }
 
         return values;
-    }
-
-    private SimpleRegister[] timeBytesToRegisters(byte[] data){
-        SimpleRegister[] result = new SimpleRegister[2];
-        result[0] = new SimpleRegister(data[0], data[1]);
-        result[1] = new SimpleRegister(data[2], data[3]);
-        return result;
     }
 }

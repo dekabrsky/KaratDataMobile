@@ -33,7 +33,7 @@ public abstract class ModbusConnectionProvider<TSettings> implements IConnection
     }
 
     @Override
-    public void disconnect() {
+    public void disconnect() throws Exception {
         if (!isConnected())
             return;
 
