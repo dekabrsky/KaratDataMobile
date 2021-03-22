@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +25,10 @@ import com.example.karatdatamobile.Enums.ConnectionMode;
 import com.example.karatdatamobile.Models.AppSettings;
 import com.example.karatdatamobile.Models.DeviceDataQuery;
 
+import net.wimpi.modbus.usbserial.UsbSerialParameters;
+
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -104,11 +108,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void startReadData(View view) {
         DeviceDataQuery deviceDataQuery = collectDeviceDataQuery();
-        AppSettings appSettings = getAppSettings();
+        //AppSettings appSettings = getAppSettings();
 
         Intent toTerm = new Intent(MainActivity.this, TerminalActivity.class);
         toTerm.putExtra("DeviceDataQuery", deviceDataQuery);
-        toTerm.putExtra("AppSettings", appSettings);
+        //toTerm.putExtra("AppSettings", appSettings);
 
         startActivity(toTerm);
     }
@@ -143,7 +147,13 @@ public class MainActivity extends AppCompatActivity {
         String ip = sharedSettings.getString("Ip", null);
         String port = sharedSettings.getString("Port", null);
         String address = sharedSettings.getString("Address", null);
+        int baudrate = sharedSettings.getInt("Baudrate", 19200);
 
-        return new AppSettings(connectionMode, port, ip, address);
+        if (connectionMode.equals(ConnectionMode.TCP))
+            return new AppSettings(connectionMode, port, ip, address);
+        else {
+            UsbManager usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+            return new AppSettings(connectionMode, baudrate, usbManager, address);
+        }
     }
 }

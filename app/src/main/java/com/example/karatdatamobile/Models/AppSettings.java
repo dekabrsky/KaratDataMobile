@@ -18,7 +18,7 @@ public class AppSettings implements Serializable {
     private String ip;
 
     // USB Settings
-    private UsbSerialParameters params;
+    private int baudrate;
     private UsbManager manager;
 
 
@@ -29,9 +29,9 @@ public class AppSettings implements Serializable {
         this.address = address;
     }
 
-    public AppSettings(ConnectionMode connectionMode, UsbSerialParameters params, UsbManager manager, String address) {
+    public AppSettings(ConnectionMode connectionMode, int baudrate, UsbManager manager, String address) {
         this.connectionMode = connectionMode;
-        this.params = params;
+        this.baudrate = baudrate;
         this.manager = manager;
         this.address = address;
     }
@@ -52,7 +52,7 @@ public class AppSettings implements Serializable {
         return address;
     }
 
-    public UsbSerialParameters getParams(){ return params; }
+    public int getBaudrate() { return baudrate; }
 
-    public UsbManager getManager(){ return manager; }
+    public UsbManager getManager() { return manager; }
 }

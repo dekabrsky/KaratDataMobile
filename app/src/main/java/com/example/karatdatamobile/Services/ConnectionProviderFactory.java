@@ -46,7 +46,14 @@ public class ConnectionProviderFactory {
     }
 
     private static UsbConnectionSettings toUsbConnectionSettings(AppSettings appSettings) {
-        UsbSerialParameters params = appSettings.getParams();
+        UsbSerialParameters params = new UsbSerialParameters();
+        params.setPortName("COM1");
+        params.setBaudRate(appSettings.getBaudrate());
+        params.setDatabits(8);
+        params.setParity("None");
+        params.setStopbits(1);
+        params.setEncoding("rtu");
+        params.setEcho(false);
         UsbManager manager = appSettings.getManager();
         int slaveId = Integer.parseInt(appSettings.getAddress());
         return new UsbConnectionSettings(params, manager, slaveId);

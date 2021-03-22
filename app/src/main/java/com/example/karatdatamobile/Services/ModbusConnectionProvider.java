@@ -1,5 +1,7 @@
 package com.example.karatdatamobile.Services;
 
+import android.hardware.usb.UsbManager;
+
 import com.example.karatdatamobile.Interfaces.IConnectionProvider;
 import com.example.karatdatamobile.Models.TcpConnectionSettings;
 import com.example.karatdatamobile.Models.UsbConnectionSettings;

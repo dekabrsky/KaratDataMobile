@@ -30,7 +30,7 @@ public class UsbConnectionProvider extends ModbusConnectionProvider<UsbConnectio
         writeRequest.setReference(offset);
         writeRequest.setRegisters(timeBytesToRegisters(data));
         writeRequest.setUnitID(settings.getSlaveId());
-        ModbusRTUTCPTransaction trans = new ModbusRTUTCPTransaction((RTUTCPMasterConnection) master);
+        ModbusSerialTransaction trans = new ModbusSerialTransaction((SerialConnection) master);
         trans.setRequest(writeRequest);
         trans.execute();
     }
@@ -38,7 +38,7 @@ public class UsbConnectionProvider extends ModbusConnectionProvider<UsbConnectio
     @Override
     public int[] read(int offset, int quantity) throws Exception {
         ReadMultipleRegistersRequest req = new ReadMultipleRegistersRequest(offset, quantity);
-        req.setUnitID(1);
+        req.setUnitID(settings.getSlaveId());
 
         ModbusSerialTransaction trans = new ModbusSerialTransaction((SerialConnection) master);
         trans.setRequest(req);

@@ -1,5 +1,8 @@
 package com.example.karatdatamobile;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -11,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.karatdatamobile.Enums.ArchiveType;
+import com.example.karatdatamobile.Enums.ConnectionMode;
 import com.example.karatdatamobile.Enums.DataBlockType;
 import com.example.karatdatamobile.Interfaces.IConnectionProvider;
 import com.example.karatdatamobile.Models.AppSettings;
@@ -39,6 +43,9 @@ public class TerminalActivity extends AppCompatActivity {
     ImageButton share;
     ListView listView;
 
+    SharedPreferences sharedSettings;
+    private static final String APP_PREFERENCES = "settingsMemory";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +61,8 @@ public class TerminalActivity extends AppCompatActivity {
 
         listView.setAdapter(adapter);
 
-        AppSettings appSettings = (AppSettings) getIntent().getSerializableExtra("AppSettings");
+        sharedSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        AppSettings appSettings = getAppSettings();
         DeviceDataQuery deviceDataQuery = (DeviceDataQuery) getIntent().getSerializableExtra("DeviceDataQuery");
 
         startReadData(appSettings, deviceDataQuery);
@@ -69,7 +77,7 @@ public class TerminalActivity extends AppCompatActivity {
             binaryDataProvider.onErrors(this::errorEventListener);
 
             readBaseData(binaryDataProvider);
-            readArchives(binaryDataProvider, deviceDataQuery);
+            //readArchives(binaryDataProvider, deviceDataQuery);
 
             writeToUi("Чтение данных завершено");
         }).start();
@@ -180,5 +188,22 @@ public class TerminalActivity extends AppCompatActivity {
         }
 
         writeToUi(sb.toString());
+    }
+
+    private AppSettings getAppSettings() {
+        ConnectionMode connectionMode = ConnectionMode.valueOf(
+                sharedSettings.getString("ConnectionMode", ConnectionMode.TCP.toString()));
+        String ip = sharedSettings.getString("Ip", null);
+        String port = sharedSettings.getString("Port", null);
+        String address = sharedSettings.getString("Address", null);
+        int baudrate = sharedSettings.getInt("Baudrate", 19200);
+
+        if (connectionMode.equals(ConnectionMode.TCP))
+            return new AppSettings(connectionMode, port, ip, address);
+        else{
+            UsbManager usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+            Log.d("Devices", String.valueOf(usbManager.getDeviceList()));
+            return new AppSettings(connectionMode, baudrate, usbManager, address);
+        }
     }
 }

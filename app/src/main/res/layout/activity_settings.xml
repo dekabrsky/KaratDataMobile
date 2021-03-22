@@ -174,7 +174,7 @@
         app:layout_constraintTop_toBottomOf="@+id/TCP" />
 
     <TextView
-        android:id="@+id/textView_usb"
+        android:id="@+id/textView_baudrate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -190,7 +190,7 @@
         app:layout_constraintTop_toBottomOf="@+id/usb" />
 
     <Spinner
-        android:id="@+id/spinner_usb"
+        android:id="@+id/spinner_baudrate"
         android:layout_width="0dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
@@ -203,7 +203,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_usb"
+        app:layout_constraintTop_toBottomOf="@+id/textView_baudrate"
         app:layout_constraintVertical_bias="0.0"
         />
 

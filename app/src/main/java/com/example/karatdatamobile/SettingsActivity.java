@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -25,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     EditText ip, port, address;
     RadioButton radioTCP, radioUSB;
+    int baudrate;
 
     TextView ip_text, usb_text;
     Spinner spinner_usb;
@@ -45,8 +48,8 @@ public class SettingsActivity extends AppCompatActivity {
         address = findViewById(R.id.editText_a);
 
         ip_text = findViewById(R.id.textView2);
-        usb_text = findViewById(R.id.textView_usb);
-        spinner_usb = findViewById(R.id.spinner_usb);
+        usb_text = findViewById(R.id.textView_baudrate);
+        spinner_usb = findViewById(R.id.spinner_baudrate);
 
         radioTCP = findViewById(R.id.TCP);
         radioUSB = findViewById(R.id.usb);
@@ -54,6 +57,22 @@ public class SettingsActivity extends AppCompatActivity {
         saveSettingsBtn.setOnClickListener(v -> SaveSettingsAdnReturn());
 
         SetSavedSettings();
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.spinner_array_usb, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner_usb.setAdapter(adapter);
+
+        spinner_usb.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent,
+                                       View itemSelected, int selectedItemPosition, long selectedId) {
+                String[] choose = getResources().getStringArray(R.array.spinner_array_usb);
+                baudrate = Integer.parseInt(choose[selectedItemPosition]);
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     private void SetSavedSettings() {
@@ -88,6 +107,7 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putString("Ip", ip.getText().toString());
         editor.putString("Port", port.getText().toString());
         editor.putString("Address", address.getText().toString());
+        editor.putInt("Baudrate", baudrate);
         editor.putString("ConnectionMode", mode.toString());
         editor.apply();
     }
