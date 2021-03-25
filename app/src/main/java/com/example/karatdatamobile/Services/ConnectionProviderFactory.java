@@ -10,8 +10,6 @@ import com.example.karatdatamobile.Models.UsbConnectionSettings;
 
 import net.wimpi.modbus.usbserial.UsbSerialParameters;
 
-import java.net.InetAddress;
-
 public class ConnectionProviderFactory {
 
     public static IConnectionProvider Create(AppSettings appSettings) {

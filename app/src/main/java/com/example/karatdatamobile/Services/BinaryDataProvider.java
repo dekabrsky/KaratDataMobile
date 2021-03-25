@@ -1,7 +1,5 @@
 package com.example.karatdatamobile.Services;
 
-import android.util.Log;
-
 import com.example.karatdatamobile.Interfaces.IConnectionProvider;
 import com.example.karatdatamobile.Interfaces.OnErrorsListener;
 import com.example.karatdatamobile.Interfaces.OnReadBlockListener;

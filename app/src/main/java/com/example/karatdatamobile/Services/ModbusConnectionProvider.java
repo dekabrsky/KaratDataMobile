@@ -1,18 +1,13 @@
 package com.example.karatdatamobile.Services;
 
-import android.hardware.usb.UsbManager;
-
 import com.example.karatdatamobile.Interfaces.IConnectionProvider;
 import com.example.karatdatamobile.Models.TcpConnectionSettings;
 import com.example.karatdatamobile.Models.UsbConnectionSettings;
-import com.intelligt.modbus.jlibmodbus.exception.ModbusIOException;
-import com.intelligt.modbus.jlibmodbus.master.ModbusMaster;
-import com.intelligt.modbus.jlibmodbus.master.ModbusMasterFactory;
-import com.intelligt.modbus.jlibmodbus.serial.SerialParameters;
 
 import net.wimpi.modbus.net.MasterConnection;
 import net.wimpi.modbus.net.RTUTCPMasterConnection;
 import net.wimpi.modbus.net.SerialConnection;
+import net.wimpi.modbus.util.SerialParameters;
 
 public abstract class ModbusConnectionProvider<TSettings> implements IConnectionProvider {
 
@@ -61,6 +56,4 @@ public abstract class ModbusConnectionProvider<TSettings> implements IConnection
             e.printStackTrace();
         }
     }
-
-    protected abstract SerialParameters getSerialParameters() throws Exception;
 }

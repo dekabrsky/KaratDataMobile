@@ -1,15 +1,11 @@
 package com.example.karatdatamobile.Services;
 
 import com.example.karatdatamobile.Models.UsbConnectionSettings;
-import com.intelligt.modbus.jlibmodbus.serial.SerialParameters;
 
-import net.wimpi.modbus.io.ModbusRTUTCPTransaction;
 import net.wimpi.modbus.io.ModbusSerialTransaction;
-import net.wimpi.modbus.msg.ModbusRequest;
 import net.wimpi.modbus.msg.ReadMultipleRegistersRequest;
 import net.wimpi.modbus.msg.ReadMultipleRegistersResponse;
 import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
-import net.wimpi.modbus.net.RTUTCPMasterConnection;
 import net.wimpi.modbus.net.SerialConnection;
 
 import static com.example.karatdatamobile.Services.BinaryDataParser.timeBytesToRegisters;
@@ -17,11 +13,6 @@ import static com.example.karatdatamobile.Services.BinaryDataParser.timeBytesToR
 public class UsbConnectionProvider extends ModbusConnectionProvider<UsbConnectionSettings> {
     public UsbConnectionProvider(UsbConnectionSettings usbConnectionSettings) {
         super(usbConnectionSettings);
-    }
-
-    @Override
-    protected SerialParameters getSerialParameters() throws Exception {
-        return null;
     }
 
     @Override

@@ -4,10 +4,7 @@ import android.hardware.usb.UsbManager;
 
 import com.example.karatdatamobile.Enums.ConnectionMode;
 
-import net.wimpi.modbus.usbserial.UsbSerialParameters;
-
 import java.io.Serializable;
-import java.net.InetAddress;
 
 public class AppSettings implements Serializable {
     private final ConnectionMode connectionMode;

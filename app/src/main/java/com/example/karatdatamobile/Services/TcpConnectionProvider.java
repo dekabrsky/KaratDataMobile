@@ -1,18 +1,11 @@
 package com.example.karatdatamobile.Services;
 
 import com.example.karatdatamobile.Models.TcpConnectionSettings;
-import com.intelligt.modbus.jlibmodbus.serial.SerialParameters;
-import com.intelligt.modbus.jlibmodbus.serial.SerialPort;
-import com.intelligt.modbus.jlibmodbus.serial.SerialPortFactoryTcpClient;
-import com.intelligt.modbus.jlibmodbus.serial.SerialUtils;
-import com.intelligt.modbus.jlibmodbus.tcp.TcpParameters;
-
 import net.wimpi.modbus.io.ModbusRTUTCPTransaction;
 import net.wimpi.modbus.msg.ReadMultipleRegistersRequest;
 import net.wimpi.modbus.msg.ReadMultipleRegistersResponse;
 import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
 import net.wimpi.modbus.net.RTUTCPMasterConnection;
-import net.wimpi.modbus.procimg.SimpleRegister;
 
 import static com.example.karatdatamobile.Services.BinaryDataParser.timeBytesToRegisters;
 
@@ -20,22 +13,6 @@ public class TcpConnectionProvider extends ModbusConnectionProvider<TcpConnectio
 
     public TcpConnectionProvider(TcpConnectionSettings tcpConnectionSettings) {
         super(tcpConnectionSettings);
-    }
-
-    @Override
-    protected SerialParameters getSerialParameters() throws Exception {
-        TcpParameters tcpParameter = new TcpParameters();
-
-        tcpParameter.setHost(settings.getIp());
-        tcpParameter.setPort(settings.getPort());
-        tcpParameter.setKeepAlive(true);
-
-        SerialParameters serialParameter = new SerialParameters();
-        serialParameter.setBaudRate(SerialPort.BaudRate.BAUD_RATE_9600);
-
-        SerialUtils.setSerialPortFactory(new SerialPortFactoryTcpClient(tcpParameter));
-
-        return serialParameter;
     }
 
     @Override
