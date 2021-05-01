@@ -77,7 +77,7 @@ public class TerminalActivity extends AppCompatActivity {
             binaryDataProvider.onErrors(this::errorEventListener);
 
             readBaseData(binaryDataProvider);
-            //readArchives(binaryDataProvider, deviceDataQuery);
+            readArchives(binaryDataProvider, deviceDataQuery);
 
             writeToUi("Чтение данных завершено");
         }).start();

@@ -21,13 +21,13 @@ public class RecordRow {
         year = HexByteToInt(responseArray[i++]) + 2000;
         row.add(day + "." + month + "." + year);
         for (String title : cfg.getTitles()) {
-            if (title.length() == 1) {
+            if (Titles.titlesWithFloatValues.contains(title)) {
                 ArrayList<String> four = new ArrayList<>();
                 for (int z = 0; z < 4; z++)
                     four.add(responseArray[i++]);
                 String fourTranslate = FourByteToFloat(four);
                 row.add(fourTranslate);
-            } else {
+            } else if (Titles.titlesWithLongValues.contains(title)) {
                 ArrayList<String> four = new ArrayList<>();
                 for (int z = 0; z < 4; z++)
                     four.add(responseArray[i++]);
