@@ -34,6 +34,16 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    // неоходимо для корректной работы либы poishadow-all
+    static {
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory",
+                "com.fasterxml.aalto.stax.InputFactoryImpl");
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory",
+                "com.fasterxml.aalto.stax.OutputFactoryImpl");
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory",
+                "com.fasterxml.aalto.stax.EventFactoryImpl");
+    }
+
     private static final String APP_PREFERENCES = "settingsMemory";
     SharedPreferences sharedSettings;
 
