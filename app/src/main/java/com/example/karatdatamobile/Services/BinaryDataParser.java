@@ -122,7 +122,7 @@ public class BinaryDataParser {
         return String.valueOf(Integer.parseInt(model16, 16));
     }
 
-    public static SimpleRegister[] timeBytesToRegisters(byte[] data){
+    public static SimpleRegister[] timeBytesToRegisters(byte[] data) {
         SimpleRegister[] result = new SimpleRegister[2];
         result[0] = new SimpleRegister(data[0], data[1]);
         result[1] = new SimpleRegister(data[2], data[3]);

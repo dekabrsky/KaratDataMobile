@@ -1,7 +1,9 @@
 package com.example.karatdatamobile;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,8 @@ import com.example.karatdatamobile.Enums.ArchiveType;
 import com.example.karatdatamobile.Enums.ConnectionMode;
 import com.example.karatdatamobile.Enums.DataBlockType;
 import com.example.karatdatamobile.Interfaces.IConnectionProvider;
+import com.example.karatdatamobile.Interfaces.IReportBuilder;
+import com.example.karatdatamobile.Interfaces.ITemplateProvider;
 import com.example.karatdatamobile.Models.AppSettings;
 import com.example.karatdatamobile.Models.ArchivesConfig;
 import com.example.karatdatamobile.Models.ArchivesRegisters;
@@ -24,10 +28,13 @@ import com.example.karatdatamobile.Models.DataBlock;
 import com.example.karatdatamobile.Models.DataBlockInfo;
 import com.example.karatdatamobile.Models.DataBlockInfoPresets;
 import com.example.karatdatamobile.Models.DeviceDataQuery;
+import com.example.karatdatamobile.Services.BinaryDataParser;
 import com.example.karatdatamobile.Services.BinaryDataProvider;
 import com.example.karatdatamobile.Services.ConnectionProviderFactory;
-import com.example.karatdatamobile.Services.BinaryDataParser;
+import com.example.karatdatamobile.Services.ReportBuilder;
+import com.example.karatdatamobile.Services.TemplateProvider;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -65,7 +72,43 @@ public class TerminalActivity extends AppCompatActivity {
         AppSettings appSettings = getAppSettings();
         DeviceDataQuery deviceDataQuery = (DeviceDataQuery) getIntent().getSerializableExtra("DeviceDataQuery");
 
-        startReadData(appSettings, deviceDataQuery);
+        startCreateReport();
+//        startReadData(appSettings, deviceDataQuery);
+    }
+
+    private void startCreateReport() {
+        new Thread(() -> {
+
+            Resources res = getResources();
+            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+
+            File directory = cw.getExternalFilesDir("Karat");
+//            String reportsDirectoryPath = directory.toString() + "/" + "reports";
+//            String csvDirectoryPath = directory.toString() + "/" + "csv";
+
+            HashMap<String, String> userData = new HashMap<>();
+            userData.put("Имя", "Andrey");
+            userData.put("Улица", "Gachi");
+            userData.put("Дом", "100500");
+
+            HashMap<String, String[][]> parsedData = new HashMap<>();
+            parsedData.put("DATA", new String[][]{
+                    new String[]{"Lol", "KeK", "HaHa", "Oh,no"},
+                    new String[]{"100", "200", "300", "400"},
+                    new String[]{"300", "200", "500", "400"},
+            });
+
+            ITemplateProvider templateProvider = new TemplateProvider(res);
+            IReportBuilder reportProvider = new ReportBuilder(directory.toString(), directory.toString(), templateProvider);
+
+            try {
+                reportProvider.constructCsvReport("test.csv", parsedData);
+                reportProvider.constructXlsxReport("test.xlsx", "test", userData, parsedData);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }).start();
     }
 
     private void startReadData(AppSettings appSettings, DeviceDataQuery deviceDataQuery) {
@@ -200,7 +243,7 @@ public class TerminalActivity extends AppCompatActivity {
 
         if (connectionMode.equals(ConnectionMode.TCP))
             return new AppSettings(connectionMode, port, ip, address);
-        else{
+        else {
             UsbManager usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
             Log.d("Devices", String.valueOf(usbManager.getDeviceList()));
             return new AppSettings(connectionMode, baudrate, usbManager, address);
