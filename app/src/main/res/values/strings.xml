@@ -1,5 +1,5 @@
 ﻿<resources>
-    <string name="app_name">КАРАТ-ДАТА</string>
+    <string name="app_name">Карат-Дата</string>
     <string name="eText_name_save">Имя файла (опционально)</string>
     <string name="tView_device"> Приборы</string>
     <string name="hourly">Почасовой</string>
