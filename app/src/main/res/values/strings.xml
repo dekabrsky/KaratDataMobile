@@ -1,18 +1,23 @@
-﻿<resources>
-    <string name="app_name">Карат-Дата</string>
-    <string name="eText_name_save">Имя файла (опционально)</string>
-    <string name="tView_device"> Приборы</string>
-    <string name="hourly">Почасовой</string>
-    <string name="daily">Посуточный</string>
-    <string name="monthly">Помесячный</string>
-    <string name="emergency">Аварийный</string>
-    <string name="integral">Интегральный</string>
-    <string name="protective">Защитный</string>
-    <string name="eventful">Событий</string>
-    <string-array name="spinner_array">
-        <item>306/7/8</item>
-        <item>2-213/223</item>
+<resources>
+    <string name="app_name">Карат Дата</string>
+    <string name="tab_text_1">Архивы</string>
+    <string name="tab_text_2">Отчёты</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="spinner_device">
+        <item>Выберите прибор</item>
+        <item>213/223</item>
+        <item>306/307/308</item>
     </string-array>
+    <string name="title_activity_setting_device">SettingDeviceActivity</string>
+    <string name="text_setting_device">Выберите способ предачи</string>
+    <string name="text_usb">USB</string>
+    <string name="text_tsp">TCP</string>
+    <string name="text_input_port">Введите Port</string>
+    <string name="text_input_ip">Введите IP адрес</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
     <string-array name="spinner_array_usb">
         <item>2400</item>
         <item>4800</item>

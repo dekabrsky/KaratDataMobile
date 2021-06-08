@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_blank1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.ArchivesFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/saveLabel"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/startDate"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="75dp"
+            android:hint="Введите имя для сохранения"
+            app:startIconTint="@color/c_text_light"
+            app:suffixTextColor="@color/c_label">
+
+            <!--this is the actual edit text which takes the input-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_name"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textColor="@color/c_label"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/startDate"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Начинать с"
+            app:startIconTint="@color/c_text_light"
+            app:suffixTextColor="@color/c_label"
+            tools:ignore="NotSibling">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_date"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textColor="@color/c_label"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/img_data"
+            android:layout_width="40dp"
+            android:layout_height="10dp"
+            android:layout_alignTop="@+id/startDate"
+            android:layout_alignEnd="@+id/startDate"
+            android:layout_alignBottom="@+id/startDate"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="3dp"
+            android:background="@color/c_light_mint"
+            android:src="@drawable/ic_calendar_foreground"
+            tools:visibility="visible" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/protocol"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/startDate"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="75dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Выберите способ передачи"
+            app:startIconTint="@color/c_text_light"
+            app:suffixTextColor="@color/c_label"
+            tools:ignore="NotSibling">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_setting"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textColor="@color/c_label"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/img_setting"
+            android:layout_width="40dp"
+            android:layout_height="10dp"
+            android:layout_alignTop="@+id/protocol"
+            android:layout_alignEnd="@+id/protocol"
+            android:layout_alignBottom="@+id/protocol"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="3dp"
+            android:background="@color/c_light_mint"
+            android:src="@drawable/ic_pencil_foreground" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="395dp"
+            android:layout_height="51dp"
+            android:layout_below="@+id/protocol"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="16dp"
+            android:elevation="100dp"
+            android:entries="@array/spinner_device"
+            android:popupElevation="10dp"
+            android:popupBackground="@color/c_light_mint"
+            android:theme="@style/spinnerTheme" />
+
+        <TextView
+            android:id="@+id/readArchivesHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/raleway_medium"
+            android:text="Читать архивы"
+            android:textColor="@color/c_text_light"
+            android:textSize="24sp" />
+
+        <CheckBox
+            android:id="@+id/hourly"
+            android:layout_width="228dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/readArchivesHeader"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="177dp"
+            android:text="Почасовой"
+            android:textColor="@color/c_text_light"
+            android:textSize="16sp"
+            android:theme="@style/CheckboxStyle"
+            app:useMaterialThemeColors="false" />
+
+        <CheckBox
+            android:id="@+id/daily"
+            android:layout_width="218dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/hourly"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="177dp"
+            android:text="Посуточный"
+            android:textColor="@color/c_text_light"
+            android:textSize="16sp"
+            android:theme="@style/CheckboxStyle"
+            app:useMaterialThemeColors="false" />
+
+        <CheckBox
+            android:id="@+id/weekly"
+            android:layout_width="218dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/daily"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="177dp"
+            android:text="Помесячный"
+            android:textColor="@color/c_text_light"
+            android:textSize="16sp"
+            android:theme="@style/CheckboxStyle"
+            app:useMaterialThemeColors="false" />
+
+        <CheckBox
+            android:id="@+id/integral"
+            android:layout_width="218dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/weekly"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="177dp"
+            android:text="Интегральный"
+            android:textColor="@color/c_text_light"
+            android:textSize="16sp"
+            android:theme="@style/CheckboxStyle"
+            app:useMaterialThemeColors="false" />
+
+        <CheckBox
+            android:id="@+id/accident"
+            android:layout_width="218dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/integral"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="177dp"
+            android:text="Аварийный"
+            android:textColor="@color/c_text_light"
+            android:textSize="16sp"
+            android:theme="@style/CheckboxStyle"
+            app:useMaterialThemeColors="false" />
+
+        <CheckBox
+            android:id="@+id/journal"
+            android:layout_width="218dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/accident"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="177dp"
+            android:text="Журнал событий"
+            android:textColor="@color/c_text_light"
+            android:textSize="16sp"
+            android:theme="@style/CheckboxStyle"
+            app:useMaterialThemeColors="false" />
+
+        <CheckBox
+            android:id="@+id/securedJournal"
+            android:layout_width="218dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/journal"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="177dp"
+            android:text="Защ. журнал"
+            android:textColor="@color/c_text_light"
+            android:textSize="16sp"
+            android:theme="@style/CheckboxStyle"
+            app:useMaterialThemeColors="false" />
+    </RelativeLayout>
+</ScrollView>
