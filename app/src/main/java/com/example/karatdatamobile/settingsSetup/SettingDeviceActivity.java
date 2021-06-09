@@ -1,4 +1,4 @@
-package com.example.karatdatamobile;
+package com.example.karatdatamobile.settingsSetup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.widget.RadioButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.karatdatamobile.MainActivity;
+import com.example.karatdatamobile.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -40,7 +42,7 @@ public class SettingDeviceActivity extends AppCompatActivity {
         floatingActionButton_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SettingDeviceActivity.this, com.example.karatdatamobile.MainActivity.class);
+                Intent intent = new Intent(SettingDeviceActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });

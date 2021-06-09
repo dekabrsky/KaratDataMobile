@@ -8,6 +8,7 @@
     android:foregroundTint="@color/c_tablable_dark"
     android:screenOrientation="landscape"
     android:orientation="vertical"
+    android:id="@+id/MainContainer"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout

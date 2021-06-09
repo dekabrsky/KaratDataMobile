@@ -69,7 +69,8 @@
             android:layout_marginBottom="3dp"
             android:background="@color/c_light_mint"
             android:src="@drawable/ic_calendar_foreground"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            android:inputType="date"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/protocol"
@@ -89,7 +90,8 @@
                 android:id="@+id/edit_text_setting"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:textColor="@color/c_label"/>
+                android:textColor="@color/c_label"
+                android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
