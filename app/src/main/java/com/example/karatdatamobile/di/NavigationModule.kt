@@ -1,4 +1,4 @@
-package com.example.githublist.di
+package com.example.karatdatamobile.di
 
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router

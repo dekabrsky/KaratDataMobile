@@ -65,6 +65,10 @@ dependencies {
     implementation 'com.github.stephanenicolas.toothpick:toothpick-runtime:3.1.0'
     implementation 'com.github.stephanenicolas.toothpick:smoothie-androidx:3.1.0'
     kapt 'com.github.stephanenicolas.toothpick:toothpick-compiler:3.1.0'
+
+
+    implementation "com.github.moxy-community:moxy:2.2.1"
+    kapt "com.github.moxy-community:moxy-compiler:2.2.1"
 }
 repositories {
     mavenCentral()

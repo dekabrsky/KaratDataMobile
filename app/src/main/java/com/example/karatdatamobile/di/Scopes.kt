@@ -1,5 +1,5 @@
-package com.example.githublist.di
+package com.example.karatdatamobile.di
 
 object Scopes {
-    const val AUTH = "AUTH"
+
 }

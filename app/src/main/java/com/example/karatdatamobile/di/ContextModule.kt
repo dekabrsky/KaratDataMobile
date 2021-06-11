@@ -1,4 +1,4 @@
-package com.example.githublist.di
+package com.example.karatdatamobile.di
 
 import android.app.Activity
 import android.content.Context

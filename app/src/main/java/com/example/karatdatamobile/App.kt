@@ -1,7 +1,8 @@
 package com.example.karatdatamobile
 
 import android.app.Application
-import com.example.githublist.di.NavigationModule
+import com.example.karatdatamobile.di.NavigationModule
+import com.example.karatdatamobile.di.PresentersModule
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
@@ -28,7 +29,7 @@ class App : Application() {
         disposable = CompositeDisposable()
 
        Toothpick.openRootScope()
-           .installModules(NavigationModule())
+           .installModules(NavigationModule(), PresentersModule())
            .inject(this)
     }
 
