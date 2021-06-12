@@ -3,7 +3,6 @@ package com.example.karatdatamobile.main
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.icu.util.Calendar
@@ -11,10 +10,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.example.karatdatamobile.App
 import com.example.karatdatamobile.R
-import com.example.karatdatamobile.settingsSetup.SettingDeviceActivity
 import com.example.karatdatamobile.databinding.FragmentArchivesBinding
 import com.example.karatdatamobile.settingsSetup.SettingSetupFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
@@ -41,7 +38,7 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentArchivesBinding.inflate(inflater, container, false)
         init()
         return binding.root

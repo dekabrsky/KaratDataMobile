@@ -24,13 +24,11 @@ class MainActivity: MvpAppCompatActivity() {
             .inject(this)
 
         navigator = AppNavigator(this, R.id.main_container)
+        cicerone.getNavigatorHolder().setNavigator(navigator)
 
         if (savedInstanceState == null) {
             navigator.applyCommands(arrayOf<Command>(Replace(FragmentScreen { FlowFragment() })))
         }
-
-        cicerone.getNavigatorHolder().setNavigator(navigator)
-
     }
 
     override fun onResume() {
