@@ -19,6 +19,9 @@
     <string name="сonnection_method">Способ подключения</string>
     <string name="input_slaveid">Адрес устройства: slaveId</string>
     <string name="karat">Karat</string>
+    <string name="toRead">Читать</string>
+    <string name="no_devices">Нет подключенных устройств</string>
+    <string name="update">Обновить</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

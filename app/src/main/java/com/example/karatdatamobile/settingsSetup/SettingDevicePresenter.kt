@@ -1,8 +1,9 @@
 package com.example.karatdatamobile.settingsSetup
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.hardware.usb.UsbDevice
+import android.hardware.usb.UsbManager
 import com.example.karatdatamobile.App
 import com.example.karatdatamobile.Enums.ConnectionMode
 import com.example.karatdatamobile.Models.Prefs
@@ -12,6 +13,7 @@ import com.example.karatdatamobile.main.ArchivesFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import java.util.*
 import javax.inject.Inject
 
 @InjectViewState
@@ -56,6 +58,13 @@ class SettingDevicePresenter @Inject constructor(
             ConnectionMode.TCP, ConnectionMode.NONE -> enableTCP()
             ConnectionMode.USB -> enableUSB()
         }
+    }
+
+    fun loadDevices(){
+        val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
+        val devices: HashMap<String, UsbDevice> = usbManager.deviceList
+        if (devices.size > 0)
+            viewState.loadDevices(devices, usbManager)
     }
 
     fun save(

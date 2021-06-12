@@ -179,10 +179,44 @@
             android:layout_height="50dp"
             android:layout_marginStart="0dp"
             android:layout_marginTop="20dp"
-            android:textColor="@color/c_label"
             android:inputType="number"
+            android:textColor="@color/c_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_field_port"
             tools:ignore="MissingConstraints" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/devices_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_devices"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_field_address"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/update_devices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/update"
+        android:textColor="@color/c_light_turquoise"
+        app:layout_constraintStart_toEndOf="@id/devices_info"
+        app:layout_constraintTop_toBottomOf="@+id/text_field_address"
+        tools:visibility="visible" />
+
+    <ListView
+        android:id="@+id/device_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/devices_info"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        tools:visibility="visible"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
