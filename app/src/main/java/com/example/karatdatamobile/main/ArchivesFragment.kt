@@ -10,11 +10,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import com.example.karatdatamobile.App
 import com.example.karatdatamobile.R
 import com.example.karatdatamobile.databinding.FragmentArchivesBinding
-import com.example.karatdatamobile.settingsSetup.SettingSetupFragment
+import com.example.karatdatamobile.settingsSetup.SettingDeviceFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -32,7 +31,7 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         Toothpick.openRootScope().getInstance(ArchivesPresenter::class.java)
 
     private var mDateSetListener: OnDateSetListener? = null
-    private  var _binding: FragmentArchivesBinding? = null
+    private var _binding: FragmentArchivesBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -46,6 +45,8 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
     }
 
     private fun init(){
+        presenter.loadSaved()
+
         binding.editTextSetting.setOnFocusChangeListener { _, hasFocus ->
             if(hasFocus) showSettingsScreen()
         }
@@ -61,13 +62,18 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.loadSaved()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     override fun showSettingsScreen() =
-        App.application.getRouter().navigateTo( FragmentScreen{ SettingSetupFragment.newInstance() })
+        App.application.getRouter().navigateTo( FragmentScreen{ SettingDeviceFragment.newInstance() })
 
     override fun showCalendarDialog(){
         val cal = Calendar.getInstance()

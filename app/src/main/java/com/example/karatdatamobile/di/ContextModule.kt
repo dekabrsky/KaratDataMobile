@@ -2,6 +2,7 @@ package com.example.karatdatamobile.di
 
 import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import toothpick.config.Module
 
 class ContextModule(activity:Activity):Module(){

@@ -11,10 +11,10 @@ public class ArchivesConfig {
             char code = aByte.charAt(0);
             if (code == 'd'){
                 char subCode = aByte.charAt(1);
-                titles.add(Titles.cfgSubCodeToTitle.get(subCode));
+                titles.add(RecordTitles.cfgSubCodeToTitle.get(subCode));
             }
-            else if (Titles.cfgCodeToTitle.containsKey(code))
-                titles.add(Titles.cfgCodeToTitle.get(code));
+            else if (RecordTitles.cfgCodeToTitle.containsKey(code))
+                titles.add(RecordTitles.cfgCodeToTitle.get(code));
             else if (code == 'f') break;
         }
     }

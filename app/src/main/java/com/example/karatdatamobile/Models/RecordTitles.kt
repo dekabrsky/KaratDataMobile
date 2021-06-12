@@ -1,6 +1,6 @@
 package com.example.karatdatamobile.Models
 
-object Titles {
+object RecordTitles {
     const val V = "V"
     const val M = "M"
     const val T = "T"

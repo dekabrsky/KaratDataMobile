@@ -47,7 +47,6 @@
         android:text="@string/text_usb"
         android:textSize="16sp"
         android:textColor="@color/c_text_light"
-        android:onClick="onRadioButtonClicked"
         android:theme="@style/RadioButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tcp" />
@@ -61,7 +60,6 @@
         android:text="@string/text_tsp"
         android:textColor="@color/c_text_light"
         android:textSize="16sp"
-        android:onClick="onRadioButtonClicked"
         android:theme="@style/RadioButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_setting_device" />
@@ -92,6 +90,7 @@
             android:layout_marginStart="0dp"
             android:layout_marginTop="92dp"
             android:textColor="@color/c_label"
+            android:inputType="number"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/usb"
             tools:ignore="MissingConstraints" />
@@ -181,6 +180,7 @@
             android:layout_marginStart="0dp"
             android:layout_marginTop="20dp"
             android:textColor="@color/c_label"
+            android:inputType="number"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_field_port"
             tools:ignore="MissingConstraints" />
