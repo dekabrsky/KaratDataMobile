@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import com.example.karatdatamobile.App
 import com.example.karatdatamobile.R
 import com.example.karatdatamobile.databinding.FragmentArchivesBinding
@@ -46,22 +47,18 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
 
     private fun init(){
         binding.editTextSetting.setOnFocusChangeListener { _, hasFocus ->
-            if(hasFocus) {
-                App.application.getRouter().navigateTo( FragmentScreen{ SettingSetupFragment.newInstance() })
-            }
+            if(hasFocus) showSettingsScreen()
         }
+        binding.imgSetting.setOnClickListener { showSettingsScreen() }
 
-        binding.editTextDate.setOnFocusChangeListener { v, hasFocus ->
-            showCalendarDialog(hasFocus)
+        binding.editTextDate.setOnFocusChangeListener { _, hasFocus ->
+            presenter.onDateClick(hasFocus)
         }
+        binding.imgData.setOnClickListener { presenter.onDateClick() }
 
-        mDateSetListener =
-            OnDateSetListener { _, year, month, day ->
-                var month = month
-                month += 1
-                val date = "$day/$month/$year"
-                binding.editTextDate.setText(date)
-            }
+        mDateSetListener = OnDateSetListener { _, year, month, day ->
+            presenter.onDateChanged(year, month, day)
+        }
     }
 
     override fun onDestroyView() {
@@ -69,20 +66,25 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         _binding = null
     }
 
+    override fun showSettingsScreen() =
+        App.application.getRouter().navigateTo( FragmentScreen{ SettingSetupFragment.newInstance() })
 
-    private fun showCalendarDialog(hasFocus: Boolean){
-        if(hasFocus){
-            val cal = Calendar.getInstance()
-            val year = cal[Calendar.YEAR]
-            val month = cal[Calendar.MONTH]
-            val day = cal[Calendar.DAY_OF_MONTH]
+    override fun showCalendarDialog(){
+        val cal = Calendar.getInstance()
+        val year = cal[Calendar.YEAR]
+        val month = cal[Calendar.MONTH]
+        val day = cal[Calendar.DAY_OF_MONTH]
 
-            val dialog = DatePickerDialog(
-                activity!!,
-                R.style.CalendarDatePickerDialog1,
-                mDateSetListener, year, month, day
-            )
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.WHITE))
-            dialog.show()}
+        val dialog = DatePickerDialog(
+            activity!!,
+            R.style.CalendarDatePickerDialog1,
+            mDateSetListener, year, month, day
+        )
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+        dialog.show()
     }
+
+    override fun updateDateText(date: String) = binding.editTextDate.setText(date)
+
+    override fun updateConnectionSettingsText(text: String) = binding.editTextSetting.setText(text)
 }

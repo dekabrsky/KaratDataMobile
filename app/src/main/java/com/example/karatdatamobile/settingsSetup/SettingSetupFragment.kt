@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.example.karatdatamobile.databinding.ActivityMainBinding
 import com.example.karatdatamobile.databinding.ActivitySettingDeviceBinding
-import com.example.karatdatamobile.databinding.FragmentArchivesBinding
+import moxy.MvpAppCompatFragment
 
 
-class SettingSetupFragment: Fragment() {
+class SettingSetupFragment: MvpAppCompatFragment() {
 
     private var _binding: ActivitySettingDeviceBinding? = null
     private val binding get() = _binding!!

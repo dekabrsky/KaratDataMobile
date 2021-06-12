@@ -49,7 +49,7 @@ public class TerminalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tcp_terminal);
+        setContentView(R.layout.activity_tcp_terminal_old);
 
         dataBlocks = new ArrayList<>();
         messages = new ArrayList<>();

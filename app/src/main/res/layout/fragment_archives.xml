@@ -22,7 +22,7 @@
             android:layout_marginTop="25dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="75dp"
-            android:hint="Введите имя для сохранения"
+            android:hint="@string/filename_input"
             app:startIconTint="@color/c_text_light"
             app:suffixTextColor="@color/c_label">
 
@@ -44,7 +44,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="16dp"
-            android:hint="Начинать с"
+            android:hint="@string/date_begin"
             app:startIconTint="@color/c_text_light"
             app:suffixTextColor="@color/c_label"
             tools:ignore="NotSibling">
@@ -81,7 +81,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="75dp"
             android:layout_marginEnd="16dp"
-            android:hint="Выберите способ передачи"
+            android:hint="@string/сonnection_method"
             app:startIconTint="@color/c_text_light"
             app:suffixTextColor="@color/c_label"
             tools:ignore="NotSibling">
