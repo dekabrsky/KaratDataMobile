@@ -13,13 +13,13 @@
         android:theme="@style/Theme.KARATDATA.AppBarOverlay"
         tools:ignore="MissingConstraints">
 
-    <ImageButton
-        android:id="@+id/img_karat"
-        android:layout_width="122dp"
-        android:layout_height="58dp"
-        android:background="@color/c_toolbar"
-        app:srcCompat="@mipmap/ic_k_d_foreground"
-        android:contentDescription="@string/karat" />
+        <ImageButton
+            android:id="@+id/img_karat"
+            android:layout_width="122dp"
+            android:layout_height="58dp"
+            android:background="@color/c_toolbar"
+            app:srcCompat="@mipmap/ic_k_d_foreground"
+            android:contentDescription="@string/karat" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

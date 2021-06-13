@@ -60,7 +60,7 @@ public class TerminalActivity extends AppCompatActivity {
 
         dataBlocks = new ArrayList<>();
         messages = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, R.layout.list_item, messages);
+        adapter = new ArrayAdapter<>(this, R.layout.terminal_list_item, messages);
 
         image = findViewById(R.id.image_load);
         share = findViewById(R.id.share);
