@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_blank1"
@@ -9,19 +10,16 @@
     android:orientation="vertical"
     android:fillViewport="true">
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="710dp">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/saveLabel"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/startDate"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_alignParentTop="true"
             android:layout_marginStart="16dp"
             android:layout_marginTop="25dp"
@@ -36,7 +34,8 @@
                 android:id="@+id/edit_text_name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:textColor="@color/c_label"/>
+                android:textColor="@color/c_label"
+                android:singleLine="true"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -46,8 +45,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            app:layout_constraintTop_toBottomOf="@id/saveLabel"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/date_begin"
             app:startIconTint="@color/c_text_light"
@@ -58,17 +58,17 @@
                 android:id="@+id/edit_text_date"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:textColor="@color/c_label" />
+                android:textColor="@color/c_label"
+                android:singleLine="true"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
             android:id="@+id/img_data"
             android:layout_width="40dp"
-            android:layout_height="10dp"
-            android:layout_alignTop="@+id/startDate"
-            android:layout_alignEnd="@+id/startDate"
-            android:layout_alignBottom="@+id/startDate"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="@id/startDate"
+            app:layout_constraintEnd_toEndOf="@id/startDate"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="3dp"
@@ -82,9 +82,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/startDate"
+            app:layout_constraintTop_toBottomOf="@id/startDate"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="75dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/сonnection_method"
             app:startIconTint="@color/c_text_light"
@@ -96,17 +96,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:textColor="@color/c_label"
-                android:inputType="text" />
+                android:inputType="text"
+                android:singleLine="true"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
             android:id="@+id/img_setting"
             android:layout_width="40dp"
-            android:layout_height="10dp"
-            android:layout_alignTop="@+id/protocol"
-            android:layout_alignEnd="@+id/protocol"
-            android:layout_alignBottom="@+id/protocol"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="@id/protocol"
+            app:layout_constraintEnd_toEndOf="@id/protocol"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="3dp"
@@ -115,32 +115,32 @@
 
         <Spinner
             android:id="@+id/spinner"
-            android:layout_width="395dp"
-            android:layout_height="51dp"
-            android:layout_below="@+id/protocol"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginTop="25dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginHorizontal="16dp"
             android:elevation="100dp"
             android:entries="@array/spinner_device"
-            android:popupElevation="10dp"
             android:popupBackground="@color/c_light_mint"
-            android:theme="@style/spinnerTheme" />
+            android:popupElevation="10dp"
+            android:theme="@style/spinnerTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/protocol" />
 
         <TextView
             android:id="@+id/readArchivesHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/spinner"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/raleway_medium"
             android:text="Читать архивы"
             android:textColor="@color/c_text_light"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spinner" />
 
         <CheckBox
             android:id="@+id/hourly"
@@ -149,12 +149,14 @@
             android:layout_below="@+id/readArchivesHeader"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:text="Почасовой"
             android:textColor="@color/c_text_light"
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/readArchivesHeader"
+            android:layout_marginStart="20dp"
             app:useMaterialThemeColors="false" />
 
         <CheckBox
@@ -164,13 +166,15 @@
             android:layout_below="@+id/hourly"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="0dp"
             android:text="Посуточный"
             android:textColor="@color/c_text_light"
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
-            app:useMaterialThemeColors="false" />
+            app:useMaterialThemeColors="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hourly"
+            android:layout_marginStart="20dp"/>
 
         <CheckBox
             android:id="@+id/monthly"
@@ -179,13 +183,15 @@
             android:layout_below="@+id/daily"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="0dp"
             android:text="Помесячный"
             android:textColor="@color/c_text_light"
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
-            app:useMaterialThemeColors="false" />
+            app:useMaterialThemeColors="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/daily"
+            android:layout_marginStart="20dp"/>
 
         <CheckBox
             android:id="@+id/integral"
@@ -194,13 +200,15 @@
             android:layout_below="@+id/monthly"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="0dp"
             android:text="Интегральный"
             android:textColor="@color/c_text_light"
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
-            app:useMaterialThemeColors="false" />
+            app:useMaterialThemeColors="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/monthly"
+            android:layout_marginStart="20dp"/>
 
         <CheckBox
             android:id="@+id/accident"
@@ -209,14 +217,16 @@
             android:layout_below="@+id/integral"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="0dp"
             android:text="Аварийный"
             android:textColor="@color/c_text_light"
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
             app:useMaterialThemeColors="false"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/integral"
+            android:layout_marginStart="20dp"/>
 
         <CheckBox
             android:id="@+id/journal"
@@ -232,7 +242,9 @@
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
             app:useMaterialThemeColors="false"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/accident" />
 
         <CheckBox
             android:id="@+id/securedJournal"
@@ -241,41 +253,40 @@
             android:layout_below="@+id/journal"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="0dp"
             android:text="Защ. журнал"
             android:textColor="@color/c_text_light"
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
             app:useMaterialThemeColors="false"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/journal"
+            android:layout_marginStart="20dp"/>
 
-        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_read"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/proceedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/integral"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"
-            android:layout_marginStart="@dimen/fab_margin"
-            android:layout_marginTop="@dimen/fab_margin"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="0dp"
+            android:layout_margin="16dp"
             android:backgroundTint="@color/с_turquoise"
             android:foreground="@drawable/ic_baseline_check_24"
             app:backgroundTint="@color/с_turquoise"
             app:fabSize="normal"
             android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />-->
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <Button
+        <!--<Button
             android:id="@+id/proceedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/integral"
             android:text="@string/toRead"
-            android:layout_marginTop="10dp"/>
-    </RelativeLayout>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
-</FrameLayout>
