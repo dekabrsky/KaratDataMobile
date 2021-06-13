@@ -37,7 +37,7 @@ public class SettingDeviceActivity extends AppCompatActivity {
         field_address.setVisibility(View.GONE);
         radioTCP = (RadioButton) findViewById(R.id.tcp);
         radioUSB = (RadioButton) findViewById(R.id.usb);
-        floatingActionButton_close = findViewById(R.id.fab_close);
+        floatingActionButton_close = findViewById(R.id.fab_see);
 
         floatingActionButton_close.setOnClickListener(new View.OnClickListener() {
             @Override

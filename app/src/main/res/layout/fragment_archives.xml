@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_blank1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.ArchivesFragment">
+    tools:context=".main.ArchivesFragment"
+    android:orientation="vertical"
+    android:fillViewport="true">
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="850dp">
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/saveLabel"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -241,5 +245,24 @@
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
             app:useMaterialThemeColors="false" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/securedJournal"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="0dp"
+            android:backgroundTint="@color/с_turquoise"
+            android:foreground="@drawable/ic_baseline_check_24"
+            app:backgroundTint="@color/с_turquoise"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </RelativeLayout>
 </ScrollView>
+</FrameLayout>
