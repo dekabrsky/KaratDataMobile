@@ -1,4 +1,4 @@
-package com.example.karatdatamobile.main;
+package com.example.karatdatamobile.settingsSetup;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.karatdatamobile.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,11 +26,11 @@ import java.util.Map;
 
 public class DeviceListAdapter extends ArrayAdapter<String> {
 
-    private Context context;
+    private final Context context;
     private TextView itemListText;
     private ImageButton onBtn, offBtn;
-    private ArrayList<Map.Entry<String, UsbDevice>> listValues;
-    private UsbManager mUsbManager;
+    private final ArrayList<Map.Entry<String, UsbDevice>> listValues;
+    private final UsbManager mUsbManager;
     private static final String ACTION_USB_PERMISSION =
             "com.android.example.USB_PERMISSION";
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver()
@@ -84,40 +85,38 @@ public class DeviceListAdapter extends ArrayAdapter<String> {
             itemListText = (TextView)convertView.findViewById(R.id.DevInList);
             itemListText.setText(currentValue.getKey() + " " + device.getProductName());
 
-            itemListText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                        Toast.makeText(context,"Text Working",Toast.LENGTH_SHORT).show();
-                        }
-            });
+            itemListText.setOnClickListener(v ->
+                    Toast.makeText(context,"Text Working",Toast.LENGTH_SHORT).show());
 
             onBtn = (ImageButton)convertView.findViewById(R.id.ButtonDeviceOn);
             //To lazy to implement interface
 
-        onBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!mUsbManager.hasPermission(device)) {
-                        PendingIntent mPermissionIntent = PendingIntent.getBroadcast(context,
-                                0, new Intent(ACTION_USB_PERMISSION), 0);
-                        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
-                        context.registerReceiver(mUsbReceiver, filter);
-                        mUsbManager.requestPermission(device, mPermissionIntent);
-                    }
-                    Toast.makeText(context,"Подключен: " +
-                            device.getProductName(),Toast.LENGTH_SHORT).show();
-                    itemListText.setTypeface(null, Typeface.BOLD);
-                }
-            });
+        View finalConvertView = convertView;
+        onBtn.setOnClickListener(v -> {
+            if (!mUsbManager.hasPermission(device)) {
+                PendingIntent mPermissionIntent = PendingIntent.getBroadcast(context,
+                        0, new Intent(ACTION_USB_PERMISSION), 0);
+                IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+                context.registerReceiver(mUsbReceiver, filter);
+                mUsbManager.requestPermission(device, mPermissionIntent);
+            }
+            /*Toast.makeText(context,"Подключен: " +
+                    device.getProductName(),Toast.LENGTH_SHORT).show();
+            Snackbar.make(context, "Подключен: " + device.getProductName(), Snackbar.LENGTH_LONG).show();*/
+            Snackbar.make(
+                    finalConvertView.getRootView(),
+                    "Подключен: " + device.getProductName(),
+                    Snackbar.LENGTH_LONG)
+                    .show();
+
+            itemListText.setTypeface(null, Typeface.BOLD);
+        });
 
             offBtn = (ImageButton)convertView.findViewById(R.id.ButtonDeviceOff);
             //To lazy to implement interface
-            offBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context,"Я пока не знаю, как и что закрывать",Toast.LENGTH_SHORT).show();
-                    itemListText.setTypeface(null, Typeface.NORMAL);
-                }
+            offBtn.setOnClickListener(v -> {
+                Toast.makeText(context,"Я пока не знаю, как и что закрывать",Toast.LENGTH_SHORT).show();
+                itemListText.setTypeface(null, Typeface.NORMAL);
             });
 
             return convertView;

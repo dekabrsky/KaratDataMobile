@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.karatdatamobile.R
 import com.example.karatdatamobile.databinding.ActivitySettingDeviceBinding
-import com.example.karatdatamobile.main.DeviceListAdapter
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
