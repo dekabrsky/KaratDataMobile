@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.karatdatamobile.Enums.ConnectionMode
 import com.example.karatdatamobile.Models.DeviceDataQuery
+import com.example.karatdatamobile.Models.DeviceSettings
 import com.example.karatdatamobile.Models.Prefs
 import com.example.karatdatamobile.Models.Prefs.getOrDefault
 import com.example.karatdatamobile.Models.Prefs.getOrEmpty
@@ -28,24 +29,33 @@ class ArchivesPresenter @Inject constructor(
         prefs = context.getSharedPreferences(Prefs.DEVICE_SETTINGS, Context.MODE_PRIVATE)
         val result = when (ConnectionMode.valueOf(prefs.getOrDefault(Prefs.MODE, "NONE"))){
             ConnectionMode.NONE -> return
-            ConnectionMode.TCP -> tcpInOneString()
-            ConnectionMode.USB -> usbInOneString()
+            ConnectionMode.TCP -> tcpInOneString(
+                prefs.getOrEmpty(Prefs.IP),
+                prefs.getOrEmpty(Prefs.PORT),
+                prefs.getOrEmpty(Prefs.SLAVE_ID)
+            )
+            ConnectionMode.USB -> usbInOneString(
+                prefs.getOrEmpty(Prefs.SLAVE_ID),
+                "FTDI RS232"
+            )
         }
         viewState.updateConnectionSettingsText(result)
     }
 
-    private fun tcpInOneString(): String {
-        val ip = prefs.getOrEmpty(Prefs.IP)
-        val port = prefs.getOrEmpty(Prefs.PORT)
-        val slaveId = prefs.getOrEmpty(Prefs.SLAVE_ID)
-        return "TCP $ip:$port/$slaveId"
+    fun loadSaved(deviceSettings: DeviceSettings){
+        with (deviceSettings) {
+            val result = when (connectionMode){
+                ConnectionMode.NONE -> return
+                ConnectionMode.TCP -> tcpInOneString(ip, port, address)
+                ConnectionMode.USB -> usbInOneString(address, "FTDI RS485")
+            }
+            viewState.updateConnectionSettingsText(result)
+        }
     }
 
-    private fun usbInOneString(): String {
-        val slaveId = prefs.getOrEmpty(Prefs.SLAVE_ID)
-        val name = "FTDI RS232" // todo тут будет имя девайса
-        return "USB #$slaveId - $name"
-    }
+    private fun tcpInOneString(ip: String, port: String, slaveId: String): String = "TCP $ip:$port/$slaveId"
+
+    private fun usbInOneString(slaveId: String, name: String): String = "USB #$slaveId - $name"
 
     fun onDateClick(hasFocus: Boolean = true){
         if (hasFocus) {

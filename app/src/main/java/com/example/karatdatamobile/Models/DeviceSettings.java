@@ -6,7 +6,7 @@ import com.example.karatdatamobile.Enums.ConnectionMode;
 
 import java.io.Serializable;
 
-public class AppSettings implements Serializable {
+public class DeviceSettings implements Serializable {
     private final ConnectionMode connectionMode;
     private final String address;
 
@@ -19,14 +19,14 @@ public class AppSettings implements Serializable {
     private UsbManager manager;
 
 
-    public AppSettings(ConnectionMode connectionMode, String port, String ip, String address) {
+    public DeviceSettings(ConnectionMode connectionMode, String port, String ip, String address) {
         this.connectionMode = connectionMode;
         this.port = port;
         this.ip = ip;
         this.address = address;
     }
 
-    public AppSettings(ConnectionMode connectionMode, int baudrate, UsbManager manager, String address) {
+    public DeviceSettings(ConnectionMode connectionMode, int baudrate, UsbManager manager, String address) {
         this.connectionMode = connectionMode;
         this.baudrate = baudrate;
         this.manager = manager;

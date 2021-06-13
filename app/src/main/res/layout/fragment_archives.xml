@@ -14,7 +14,8 @@
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="850dp">
+        android:layout_height="710dp">
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/saveLabel"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -214,7 +215,8 @@
             android:textColor="@color/c_text_light"
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
-            app:useMaterialThemeColors="false" />
+            app:useMaterialThemeColors="false"
+            android:visibility="gone" />
 
         <CheckBox
             android:id="@+id/journal"
@@ -229,7 +231,8 @@
             android:textColor="@color/c_text_light"
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
-            app:useMaterialThemeColors="false" />
+            app:useMaterialThemeColors="false"
+            android:visibility="gone" />
 
         <CheckBox
             android:id="@+id/securedJournal"
@@ -244,13 +247,14 @@
             android:textColor="@color/c_text_light"
             android:textSize="16sp"
             android:theme="@style/CheckboxStyle"
-            app:useMaterialThemeColors="false" />
+            app:useMaterialThemeColors="false"
+            android:visibility="gone"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_read"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/securedJournal"
+            android:layout_alignBottom="@+id/integral"
             android:layout_alignParentEnd="true"
             android:layout_gravity="bottom|end"
             android:layout_marginStart="@dimen/fab_margin"
@@ -261,8 +265,17 @@
             android:foreground="@drawable/ic_baseline_check_24"
             app:backgroundTint="@color/с_turquoise"
             app:fabSize="normal"
+            android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />-->
+
+        <Button
+            android:id="@+id/proceedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/integral"
+            android:text="@string/toRead"
+            android:layout_marginTop="10dp"/>
     </RelativeLayout>
 </ScrollView>
 </FrameLayout>

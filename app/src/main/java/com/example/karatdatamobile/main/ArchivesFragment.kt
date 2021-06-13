@@ -11,9 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.karatdatamobile.App
+import com.example.karatdatamobile.Models.DeviceSettings
+import com.example.karatdatamobile.Models.Prefs
 import com.example.karatdatamobile.R
 import com.example.karatdatamobile.databinding.FragmentArchivesBinding
 import com.example.karatdatamobile.settingsSetup.SettingDeviceFragment
+import com.example.karatdatamobile.terminal.TerminalFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
@@ -22,6 +25,7 @@ import toothpick.Toothpick
 
 @SuppressLint("NewApi")
 class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
+    private var settings: DeviceSettings? = null
 
     @InjectPresenter
     lateinit var presenter: ArchivesPresenter
@@ -39,13 +43,18 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        arguments?.let {
+            settings = it.getSerializable(Prefs.DEVICE_SETTINGS) as DeviceSettings?
+        }
         _binding = FragmentArchivesBinding.inflate(inflater, container, false)
         init()
         return binding.root
     }
 
     private fun init(){
-        presenter.loadSaved()
+        if (settings == null)
+            presenter.loadSaved()
+        else presenter.loadSaved(settings!!)
 
         binding.editTextSetting.setOnFocusChangeListener { _, hasFocus ->
             if(hasFocus) showSettingsScreen()
@@ -93,4 +102,14 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
     override fun updateDateText(date: String) = binding.editTextDate.setText(date)
 
     override fun updateConnectionSettingsText(text: String) = binding.editTextSetting.setText(text)
+
+    companion object {
+        @JvmStatic
+        fun newInstance(settings: DeviceSettings) =
+            ArchivesFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(Prefs.DEVICE_SETTINGS, settings)
+                }
+            }
+    }
 }

@@ -6,6 +6,7 @@ import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import com.example.karatdatamobile.App
 import com.example.karatdatamobile.Enums.ConnectionMode
+import com.example.karatdatamobile.Models.DeviceSettings
 import com.example.karatdatamobile.Models.Prefs
 import com.example.karatdatamobile.Models.Prefs.getOrDefault
 import com.example.karatdatamobile.Models.Prefs.getOrEmpty
@@ -22,6 +23,7 @@ class SettingDevicePresenter @Inject constructor(
 ): MvpPresenter<SettingDeviceView>() {
     private lateinit var mode: ConnectionMode
     private lateinit var prefs: SharedPreferences
+    private val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -61,7 +63,6 @@ class SettingDevicePresenter @Inject constructor(
     }
 
     fun loadDevices(){
-        val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
         val devices: HashMap<String, UsbDevice> = usbManager.deviceList
         if (devices.size > 0)
             viewState.loadDevices(devices, usbManager)
@@ -78,6 +79,12 @@ class SettingDevicePresenter @Inject constructor(
             .putString(Prefs.PORT, port)
             .putString(Prefs.SLAVE_ID, slaveId)
             .apply()
-        close()
+        val settings = when (mode){
+            ConnectionMode.USB -> DeviceSettings(mode, 19200, usbManager, slaveId)
+            ConnectionMode.TCP -> DeviceSettings(mode, port, ip, slaveId)
+            else -> return
+        }
+        App.application.getRouter()
+            .navigateTo(FragmentScreen { ArchivesFragment.newInstance(settings) })
     }
 }

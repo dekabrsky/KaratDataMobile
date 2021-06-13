@@ -21,7 +21,7 @@ import com.example.karatdatamobile.Enums.DataBlockType;
 import com.example.karatdatamobile.Interfaces.IConnectionProvider;
 import com.example.karatdatamobile.Interfaces.IReportBuilder;
 import com.example.karatdatamobile.Interfaces.ITemplateProvider;
-import com.example.karatdatamobile.Models.AppSettings;
+import com.example.karatdatamobile.Models.DeviceSettings;
 import com.example.karatdatamobile.Models.ArchivesConfig;
 import com.example.karatdatamobile.Models.ArchivesRegisters;
 import com.example.karatdatamobile.Models.DataBlock;
@@ -69,7 +69,7 @@ public class TerminalActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         sharedSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        AppSettings appSettings = getAppSettings();
+        DeviceSettings appSettings = getAppSettings();
         DeviceDataQuery deviceDataQuery = (DeviceDataQuery) getIntent().getSerializableExtra("DeviceDataQuery");
 
         startCreateReport();
@@ -111,7 +111,7 @@ public class TerminalActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void startReadData(AppSettings appSettings, DeviceDataQuery deviceDataQuery) {
+    private void startReadData(DeviceSettings appSettings, DeviceDataQuery deviceDataQuery) {
         new Thread(() -> {
             IConnectionProvider connectionProvider = ConnectionProviderFactory.Create(appSettings);
             BinaryDataProvider binaryDataProvider = new BinaryDataProvider(connectionProvider);
@@ -233,7 +233,7 @@ public class TerminalActivity extends AppCompatActivity {
         writeToUi(sb.toString());
     }
 
-    private AppSettings getAppSettings() {
+    private DeviceSettings getAppSettings() {
         ConnectionMode connectionMode = ConnectionMode.valueOf(
                 sharedSettings.getString("ConnectionMode", ConnectionMode.TCP.toString()));
         String ip = sharedSettings.getString("Ip", null);
@@ -242,11 +242,11 @@ public class TerminalActivity extends AppCompatActivity {
         int baudrate = sharedSettings.getInt("Baudrate", 19200);
 
         if (connectionMode.equals(ConnectionMode.TCP))
-            return new AppSettings(connectionMode, port, ip, address);
+            return new DeviceSettings(connectionMode, port, ip, address);
         else {
             UsbManager usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
             Log.d("Devices", String.valueOf(usbManager.getDeviceList()));
-            return new AppSettings(connectionMode, baudrate, usbManager, address);
+            return new DeviceSettings(connectionMode, baudrate, usbManager, address);
         }
     }
 }
