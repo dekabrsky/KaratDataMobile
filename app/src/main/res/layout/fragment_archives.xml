@@ -173,7 +173,7 @@
             app:useMaterialThemeColors="false" />
 
         <CheckBox
-            android:id="@+id/weekly"
+            android:id="@+id/monthly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/daily"
@@ -191,7 +191,7 @@
             android:id="@+id/integral"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/weekly"
+            android:layout_below="@+id/monthly"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="20dp"

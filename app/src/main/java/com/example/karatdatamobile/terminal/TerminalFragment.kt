@@ -10,8 +10,9 @@ import com.example.karatdatamobile.R
 import kotlinx.android.synthetic.main.fragment_terminal.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
+import javax.inject.Inject
 
-class TerminalFragment : MvpAppCompatFragment(), TerminalView {
+class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalView {
 
     private lateinit var deviceDataQuery: DeviceDataQuery
     private lateinit var deviceSettings: DeviceSettings

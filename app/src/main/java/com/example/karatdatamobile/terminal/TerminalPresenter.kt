@@ -19,7 +19,7 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.collections.set
 
-class TerminalPresenter @Inject constructor(val context: Context) : MvpPresenter<TerminalView>() {
+class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
     private var dataBlocks = ArrayList<DataBlock>()
     private var messages = ArrayList<String>()
     private var adapter = TerminalAdapter(messages)

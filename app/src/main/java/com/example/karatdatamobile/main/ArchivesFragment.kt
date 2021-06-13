@@ -11,12 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.karatdatamobile.App
+import com.example.karatdatamobile.Enums.ArchiveType
 import com.example.karatdatamobile.Models.DeviceSettings
 import com.example.karatdatamobile.Models.Prefs
 import com.example.karatdatamobile.R
 import com.example.karatdatamobile.databinding.FragmentArchivesBinding
 import com.example.karatdatamobile.settingsSetup.SettingDeviceFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
+import com.google.android.material.snackbar.Snackbar
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
@@ -68,12 +70,34 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         mDateSetListener = OnDateSetListener { _, year, month, day ->
             presenter.onDateChanged(year, month, day)
         }
+
+        binding.proceedButton.setOnClickListener {
+            presenter.proceed(
+                "Ыывв",
+                getArchivesType() as ArrayList<ArchiveType>,
+                getDeviceSettings()
+            )
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        presenter.loadSaved()
+    private fun getArchivesType(): List<ArchiveType>{
+        val archiveTypes = mutableListOf<ArchiveType>()
+
+        if (binding.hourly.isChecked)
+            archiveTypes.add(ArchiveType.HOURLY)
+        if (binding.daily.isChecked)
+            archiveTypes.add(ArchiveType.DAILY)
+        if (binding.monthly.isChecked)
+            archiveTypes.add(ArchiveType.MONTHLY)
+        if (binding.integral.isChecked)
+            archiveTypes.add(ArchiveType.INTEGRAL)
+
+        return archiveTypes
     }
+
+    private fun getDeviceSettings(): DeviceSettings? =
+        if (settings != null) settings!!
+        else  presenter.getSettingsFromPrefs()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -100,7 +124,16 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
 
     override fun updateDateText(date: String) = binding.editTextDate.setText(date)
 
+    override fun showDateError() = Snackbar.make(requireView(), "Дата не выбрана", Snackbar.LENGTH_LONG).show()
+
     override fun updateConnectionSettingsText(text: String) = binding.editTextSetting.setText(text)
+
+    override fun showArchivesError() =
+        Snackbar.make(requireView(), "Архивы не выбраны", Snackbar.LENGTH_LONG).show()
+
+    override fun showSettingsError() {
+        Snackbar.make(requireView(), "Настройки не настроены", Snackbar.LENGTH_LONG).show()
+    }
 
     companion object {
         @JvmStatic

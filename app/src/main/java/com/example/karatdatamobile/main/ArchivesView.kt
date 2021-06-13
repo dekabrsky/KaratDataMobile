@@ -10,4 +10,7 @@ interface ArchivesView : MvpView {
     fun showCalendarDialog()
     fun updateDateText(date: String)
     fun updateConnectionSettingsText(text: String)
+    fun showDateError()
+    fun showArchivesError()
+    fun showSettingsError()
 }
