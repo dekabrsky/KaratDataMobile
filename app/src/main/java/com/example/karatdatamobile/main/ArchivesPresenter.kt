@@ -46,8 +46,8 @@ class ArchivesPresenter @Inject constructor(
             ConnectionMode.NONE -> return null
             ConnectionMode.TCP -> DeviceSettings(
                 mode,
-                prefs.getOrEmpty(Prefs.IP),
                 prefs.getOrEmpty(Prefs.PORT),
+                prefs.getOrEmpty(Prefs.IP),
                 prefs.getOrEmpty(Prefs.SLAVE_ID)
             )
             ConnectionMode.USB -> DeviceSettings(
@@ -84,7 +84,7 @@ class ArchivesPresenter @Inject constructor(
         val realMonth = month + 1
         val dateString = "$day/$realMonth/$year"
         viewState.updateDateText(dateString)
-        date = Date(year, month, day)
+        date = Date(year-2000, month, day)
     }
 
     fun proceed(

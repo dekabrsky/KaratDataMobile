@@ -114,7 +114,7 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         val day = cal[Calendar.DAY_OF_MONTH]
 
         val dialog = DatePickerDialog(
-            activity!!,
+            requireActivity(),
             R.style.CalendarDatePickerDialog1,
             mDateSetListener, year, month, day
         )

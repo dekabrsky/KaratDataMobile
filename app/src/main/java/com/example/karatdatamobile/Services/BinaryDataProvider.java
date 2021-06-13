@@ -26,7 +26,7 @@ public class BinaryDataProvider {
 
             byte day = Byte.parseByte(Integer.toHexString(start.getDate()), 16);
             byte month = Byte.parseByte(Integer.toHexString(start.getMonth() + 1), 16);
-            byte year = Byte.parseByte(Integer.toHexString(start.getYear() - 100), 16);
+            byte year = Byte.parseByte(Integer.toHexString(start.getYear()), 16);
 
             connectionProvider.write(0x0060, new byte[]{0x00, day, month, year});
 

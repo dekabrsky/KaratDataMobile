@@ -1,18 +1,14 @@
 package com.example.karatdatamobile.terminal
 
+import android.app.Activity
 import android.content.Context
-import android.hardware.usb.UsbManager
-import android.util.Log
 import com.example.karatdatamobile.Enums.ArchiveType
-import com.example.karatdatamobile.Enums.ConnectionMode
 import com.example.karatdatamobile.Enums.DataBlockType
 import com.example.karatdatamobile.Models.*
-import com.example.karatdatamobile.Models.Prefs.getOrDefault
 import com.example.karatdatamobile.Services.BinaryDataParser
 import com.example.karatdatamobile.Services.BinaryDataProvider
 import com.example.karatdatamobile.Services.ConnectionProviderFactory
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import com.example.karatdatamobile.TerminalActivity
 import moxy.MvpPresenter
 import java.util.*
 import javax.inject.Inject
@@ -24,12 +20,15 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
     private var messages = ArrayList<String>()
     private var adapter = TerminalAdapter(messages)
 
+    @Inject
+    lateinit var activity: Activity
+
     fun getRecyclerAdapter(): TerminalAdapter {
         return adapter
     }
 
     fun startReadData(appSettings: DeviceSettings, deviceDataQuery: DeviceDataQuery) {
-        GlobalScope.async {
+        Thread {
             val connectionProvider = ConnectionProviderFactory.Create(appSettings)
             val binaryDataProvider = BinaryDataProvider(connectionProvider)
             binaryDataProvider.onReadBlock { dataBlock: DataBlock? ->
@@ -47,7 +46,7 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
             readBaseData(binaryDataProvider)
             readArchives(binaryDataProvider, deviceDataQuery)
             writeToUi("Чтение данных завершено")
-        }
+        }.start()
     }
 
     private fun errorEventListener(exception: Exception) {
@@ -135,10 +134,10 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
     }
 
     private fun writeToUi(message: String) {
-        Runnable {
+        activity.runOnUiThread(Runnable {
             messages.add(message)
             adapter.notifyDataSetChanged()
-        }.run()
+        })
     }
 
     private fun writeDataBlockToUi(dataBlock: DataBlock) {
