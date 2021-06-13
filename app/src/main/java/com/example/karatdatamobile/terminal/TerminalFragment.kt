@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.karatdatamobile.Models.DeviceDataQuery
+import com.example.karatdatamobile.Models.DeviceSettings
 import com.example.karatdatamobile.R
 import kotlinx.android.synthetic.main.fragment_terminal.*
 import moxy.MvpAppCompatFragment
@@ -13,6 +14,7 @@ import moxy.presenter.InjectPresenter
 class TerminalFragment : MvpAppCompatFragment(), TerminalView {
 
     private lateinit var deviceDataQuery: DeviceDataQuery
+    private lateinit var deviceSettings: DeviceSettings
 
     @InjectPresenter
     lateinit var presenter: TerminalPresenter
@@ -20,7 +22,8 @@ class TerminalFragment : MvpAppCompatFragment(), TerminalView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            deviceDataQuery = it.getSerializable(key) as DeviceDataQuery
+            deviceDataQuery = it.getSerializable(key[0]) as DeviceDataQuery
+            deviceSettings = it.getSerializable(key[1]) as DeviceSettings
         }
     }
 
@@ -33,19 +36,21 @@ class TerminalFragment : MvpAppCompatFragment(), TerminalView {
         recycler.adapter = presenter.getRecyclerAdapter()
     }
 
-    fun startReadData(){
-        presenter.startReadData(deviceDataQuery)
+    private fun startReadData() {
+        presenter.startReadData(deviceSettings, deviceDataQuery)
     }
 
     companion object {
 
-        private const val key = "DeviceDataQuery"
+        private val key = arrayListOf<String>("DeviceDataQuery", "DeviceSettings")
+
 
         @JvmStatic
-        fun newInstance(param1: DeviceDataQuery) =
+        fun newInstance(param1: DeviceDataQuery, param2: DeviceSettings) =
             TerminalFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(key, param1)
+                    putSerializable(key[0], param1)
+                    putSerializable(key[1], param2)
                 }
             }
     }

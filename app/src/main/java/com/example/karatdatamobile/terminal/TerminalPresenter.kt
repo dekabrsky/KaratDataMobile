@@ -28,11 +28,7 @@ class TerminalPresenter @Inject constructor(val context: Context) : MvpPresenter
         return adapter
     }
 
-    fun startReadData(deviceDataQuery: DeviceDataQuery) {
-        getAppSettings()?.let { startReadData(it, deviceDataQuery) }
-    }
-
-    private fun startReadData(appSettings: DeviceSettings, deviceDataQuery: DeviceDataQuery) {
+    fun startReadData(appSettings: DeviceSettings, deviceDataQuery: DeviceDataQuery) {
         GlobalScope.async {
             val connectionProvider = ConnectionProviderFactory.Create(appSettings)
             val binaryDataProvider = BinaryDataProvider(connectionProvider)
@@ -153,28 +149,5 @@ class TerminalPresenter @Inject constructor(val context: Context) : MvpPresenter
         val parsedData = BinaryDataParser.parse(dataBlock)
         if (parsedData != null) sb.append("[Parsed-data]: ").append(parsedData).append("\n")
         writeToUi(sb.toString())
-    }
-
-
-    private fun getAppSettings(): DeviceSettings {
-        val sharedSettings =
-            context.getSharedPreferences(Prefs.DEVICE_SETTINGS, Context.MODE_PRIVATE)
-        val connectionMode = ConnectionMode.valueOf(
-            sharedSettings.getOrDefault("ConnectionMode", ConnectionMode.TCP.toString())
-        )
-        val ip: String = sharedSettings.getString("Ip", null).toString()
-        val port: String = sharedSettings.getString("Port", null).toString()
-        val address: String = sharedSettings.getString("Address", null).toString()
-        val baudrate: Int = sharedSettings.getInt("Baudrate", 19200)
-        return if (connectionMode == ConnectionMode.TCP) DeviceSettings(
-            connectionMode,
-            port,
-            ip,
-            address
-        ) else {
-            val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
-            Log.d("Devices", usbManager.deviceList.toString())
-            DeviceSettings(connectionMode, baudrate, usbManager, address)
-        }
     }
 }
