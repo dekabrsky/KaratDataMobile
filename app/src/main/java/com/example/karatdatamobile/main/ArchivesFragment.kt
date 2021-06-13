@@ -16,7 +16,6 @@ import com.example.karatdatamobile.Models.Prefs
 import com.example.karatdatamobile.R
 import com.example.karatdatamobile.databinding.FragmentArchivesBinding
 import com.example.karatdatamobile.settingsSetup.SettingDeviceFragment
-import com.example.karatdatamobile.terminal.TerminalFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter

@@ -1,33 +1,26 @@
 package com.example.karatdatamobile.terminal
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.karatdatamobile.Models.DeviceDataQuery
 import com.example.karatdatamobile.R
+import kotlinx.android.synthetic.main.fragment_terminal.*
 import moxy.MvpAppCompatFragment
+import moxy.presenter.InjectPresenter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TerminalFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TerminalFragment : MvpAppCompatFragment(), TerminalView {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var deviceDataQuery: DeviceDataQuery
+
+    @InjectPresenter
+    lateinit var presenter: TerminalPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            deviceDataQuery = it.getSerializable(key) as DeviceDataQuery
         }
     }
 
@@ -35,26 +28,24 @@ class TerminalFragment : MvpAppCompatFragment(), TerminalView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_terminal, container, false)
+        startReadData()
+        recycler.adapter = presenter.getRecyclerAdapter()
+    }
+
+    fun startReadData(){
+        presenter.startReadData(deviceDataQuery)
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TerminalFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
+        private const val key = "DeviceDataQuery"
+
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: DeviceDataQuery) =
             TerminalFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putSerializable(key, param1)
                 }
             }
     }

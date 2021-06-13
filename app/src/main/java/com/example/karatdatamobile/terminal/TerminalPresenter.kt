@@ -1,6 +1,180 @@
 package com.example.karatdatamobile.terminal
 
+import android.content.Context
+import android.hardware.usb.UsbManager
+import android.util.Log
+import com.example.karatdatamobile.Enums.ArchiveType
+import com.example.karatdatamobile.Enums.ConnectionMode
+import com.example.karatdatamobile.Enums.DataBlockType
+import com.example.karatdatamobile.Models.*
+import com.example.karatdatamobile.Models.Prefs.getOrDefault
+import com.example.karatdatamobile.Services.BinaryDataParser
+import com.example.karatdatamobile.Services.BinaryDataProvider
+import com.example.karatdatamobile.Services.ConnectionProviderFactory
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import moxy.MvpPresenter
+import java.util.*
+import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.set
 
-class TerminalPresenter: MvpPresenter<TerminalView>() {
+class TerminalPresenter @Inject constructor(val context: Context) : MvpPresenter<TerminalView>() {
+    private var dataBlocks = ArrayList<DataBlock>()
+    private var messages = ArrayList<String>()
+    private var adapter = TerminalAdapter(messages)
+
+    fun getRecyclerAdapter(): TerminalAdapter {
+        return adapter
+    }
+
+    fun startReadData(deviceDataQuery: DeviceDataQuery) {
+        getAppSettings()?.let { startReadData(it, deviceDataQuery) }
+    }
+
+    private fun startReadData(appSettings: DeviceSettings, deviceDataQuery: DeviceDataQuery) {
+        GlobalScope.async {
+            val connectionProvider = ConnectionProviderFactory.Create(appSettings)
+            val binaryDataProvider = BinaryDataProvider(connectionProvider)
+            binaryDataProvider.onReadBlock { dataBlock: DataBlock? ->
+                readBlockEventListener(
+                    dataBlock!!
+                )
+            }
+            binaryDataProvider.onErrors { exception: Exception? ->
+                if (exception != null) {
+                    errorEventListener(
+                        exception
+                    )
+                }
+            }
+            readBaseData(binaryDataProvider)
+            readArchives(binaryDataProvider, deviceDataQuery)
+            writeToUi("Чтение данных завершено")
+        }
+    }
+
+    private fun errorEventListener(exception: Exception) {
+        writeToUi("[Error]: " + exception.message)
+    }
+
+
+    private fun readBaseData(dataReader: BinaryDataProvider) {
+        val baseDataBlocks = arrayOf(
+            DataBlockInfoPresets.Model(),
+            DataBlockInfoPresets.DateTime(),
+            DataBlockInfoPresets.SerialNumber()
+        )
+        dataReader.read(baseDataBlocks)
+    }
+
+    private fun readArchives(dataReader: BinaryDataProvider, deviceDataQuery: DeviceDataQuery) {
+        val archiveRegisters = ArchivesRegisters().nameToCode
+        val config: ArchivesConfig = getArchiveConfig(dataReader)
+        dataReader.write(deviceDataQuery.startDate) // todo
+        val archives = HashMap<ArchiveType, java.util.ArrayList<DataBlock>>()
+        for (archiveType in deviceDataQuery.archiveTypes) {
+            val archiveData: ArrayList<DataBlock> = readArchiveByType(
+                dataReader,
+                archiveRegisters[archiveType] ?: 0
+            )
+            archives[archiveType] = archiveData
+        }
+        val parsedArchives: HashMap<ArchiveType, String> = parseArchives(archives, config)
+        writeParsedArchivesToUi(parsedArchives)
+    }
+
+    private fun writeParsedArchivesToUi(parsedArchives: HashMap<ArchiveType, String>) {
+        val sb = java.lang.StringBuilder()
+        sb.append("PARSED ARCHIVES").append("\n")
+        for (archiveType in parsedArchives.keys) {
+            val str = String.format("[%s]: %s", archiveType.name, parsedArchives[archiveType])
+            sb.append(str).append("\n")
+        }
+        writeToUi(sb.toString())
+    }
+
+
+    private fun getArchiveConfig(dataReader: BinaryDataProvider): ArchivesConfig {
+        val dataBlock = dataReader.read(DataBlockInfoPresets.ArchivesConfig())
+        return ArchivesConfig(BinaryDataParser.getHexContent(dataBlock.data))
+    }
+
+    private fun readArchiveByType(
+        dataReader: BinaryDataProvider,
+        type: Int
+    ): ArrayList<DataBlock> {
+        val result = java.util.ArrayList<DataBlock>()
+        var counter = 0
+        val next = type + 0x05
+        while (true) {
+            val offset = if (counter == 0) type else next
+            val dataBlockInfo = DataBlockInfo(DataBlockType.ARCHIVE, offset, "F0".toInt(16) / 2)
+            val dataBlock = dataReader.read(dataBlockInfo)
+            if (BinaryDataParser.getHexContent(dataBlock.data)[0].toString() + BinaryDataParser.getHexContent(
+                    dataBlock.data
+                )[1] == "ff"
+            ) break
+            result.add(dataBlock)
+            counter++
+        }
+        return result
+    }
+
+    private fun parseArchives(
+        archives: HashMap<ArchiveType, java.util.ArrayList<DataBlock>>,
+        config: ArchivesConfig
+    ): HashMap<ArchiveType, String> {
+        val result = HashMap<ArchiveType, String>()
+        for (archiveType in archives.keys) {
+            val parsedArchive = BinaryDataParser.parseArchive(archives[archiveType], config)
+            result[archiveType] = parsedArchive
+        }
+        return result
+    }
+
+    private fun readBlockEventListener(dataBlock: DataBlock) {
+        dataBlocks.add(dataBlock)
+        writeDataBlockToUi(dataBlock)
+    }
+
+    private fun writeToUi(message: String) {
+        Runnable {
+            messages.add(message)
+            adapter.notifyDataSetChanged()
+        }.run()
+    }
+
+    private fun writeDataBlockToUi(dataBlock: DataBlock) {
+        val sb = StringBuilder()
+        sb.append("[Type]: ").append(dataBlock.dataBlockInfo.dataBlockName.name).append("\n")
+        sb.append("[Raw-data]: ").append(BinaryDataParser.getHexContent(dataBlock.data))
+            .append("\n")
+        val parsedData = BinaryDataParser.parse(dataBlock)
+        if (parsedData != null) sb.append("[Parsed-data]: ").append(parsedData).append("\n")
+        writeToUi(sb.toString())
+    }
+
+
+    private fun getAppSettings(): DeviceSettings {
+        val sharedSettings =
+            context.getSharedPreferences(Prefs.DEVICE_SETTINGS, Context.MODE_PRIVATE)
+        val connectionMode = ConnectionMode.valueOf(
+            sharedSettings.getOrDefault("ConnectionMode", ConnectionMode.TCP.toString())
+        )
+        val ip: String = sharedSettings.getString("Ip", null).toString()
+        val port: String = sharedSettings.getString("Port", null).toString()
+        val address: String = sharedSettings.getString("Address", null).toString()
+        val baudrate: Int = sharedSettings.getInt("Baudrate", 19200)
+        return if (connectionMode == ConnectionMode.TCP) DeviceSettings(
+            connectionMode,
+            port,
+            ip,
+            address
+        ) else {
+            val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
+            Log.d("Devices", usbManager.deviceList.toString())
+            DeviceSettings(connectionMode, baudrate, usbManager, address)
+        }
+    }
 }
