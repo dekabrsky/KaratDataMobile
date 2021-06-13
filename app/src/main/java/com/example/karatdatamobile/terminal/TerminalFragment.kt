@@ -51,6 +51,9 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
 
     override fun onDataChange(){
         recycler.adapter?.notifyDataSetChanged()
+        recycler.adapter?.let {
+            recycler.smoothScrollToPosition(it.itemCount)
+        }
     }
 
     private fun startReadData() {
@@ -58,9 +61,7 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
     }
 
     companion object {
-
         private val key = arrayListOf("DeviceDataQuery", "DeviceSettings")
-
 
         @JvmStatic
         fun newInstance(param1: DeviceDataQuery, param2: DeviceSettings) =

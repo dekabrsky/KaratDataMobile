@@ -85,6 +85,6 @@ class SettingDevicePresenter @Inject constructor(
             else -> return
         }
         App.application.getRouter()
-            .navigateTo(FragmentScreen { ArchivesFragment.newInstance(settings) })
+            .replaceScreen(FragmentScreen { ArchivesFragment.newInstance(settings) })
     }
 }

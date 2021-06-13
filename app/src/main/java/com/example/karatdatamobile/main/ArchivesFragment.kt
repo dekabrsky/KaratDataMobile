@@ -19,6 +19,7 @@ import com.example.karatdatamobile.databinding.FragmentArchivesBinding
 import com.example.karatdatamobile.settingsSetup.SettingDeviceFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_archives.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
@@ -58,11 +59,15 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         else presenter.loadSaved(settings!!)
 
         binding.editTextSetting.setOnFocusChangeListener { _, hasFocus ->
-            if(hasFocus) showSettingsScreen()
+            if(hasFocus) {
+                binding.editTextSetting.clearFocus()
+                showSettingsScreen()
+            }
         }
         binding.imgSetting.setOnClickListener { showSettingsScreen() }
 
         binding.editTextDate.setOnFocusChangeListener { _, hasFocus ->
+            binding.editTextSetting.clearFocus()
             presenter.onDateClick(hasFocus)
         }
         binding.imgData.setOnClickListener { presenter.onDateClick() }
@@ -73,7 +78,7 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
 
         binding.proceedButton.setOnClickListener {
             presenter.proceed(
-                "Ыывв",
+                spinner.selectedItem.toString(),
                 getArchivesType() as ArrayList<ArchiveType>,
                 getDeviceSettings()
             )

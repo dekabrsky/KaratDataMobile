@@ -136,7 +136,7 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
     private fun writeToUi(message: String) {
         activity.runOnUiThread(Runnable {
             messages.add(message)
-            adapter.notifyDataSetChanged()
+            viewState.onDataChange()
         })
     }
 

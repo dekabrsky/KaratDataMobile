@@ -75,9 +75,7 @@ class ArchivesPresenter @Inject constructor(
     private fun usbInOneString(slaveId: String, name: String): String = "USB #$slaveId - $name"
 
     fun onDateClick(hasFocus: Boolean = true){
-        if (hasFocus) {
-            viewState.showCalendarDialog()
-        }
+        viewState.showCalendarDialog()
     }
 
     fun onDateChanged(year: Int, month: Int, day: Int){
