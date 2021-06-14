@@ -1,12 +1,14 @@
 package com.example.karatdatamobile.terminal
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import com.example.karatdatamobile.Enums.ArchiveType
 import com.example.karatdatamobile.Enums.DataBlockType
+import com.example.karatdatamobile.Interfaces.IReportBuilder
+import com.example.karatdatamobile.Interfaces.ITemplateProvider
 import com.example.karatdatamobile.Models.*
-import com.example.karatdatamobile.Services.BinaryDataParser
-import com.example.karatdatamobile.Services.BinaryDataProvider
-import com.example.karatdatamobile.Services.ConnectionProviderFactory
+import com.example.karatdatamobile.Services.*
 import com.example.karatdatamobile.utils.Lists.addToBegin
 import moxy.MvpPresenter
 import java.util.*
@@ -14,7 +16,9 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.collections.set
 
-class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
+class TerminalPresenter @Inject constructor(
+    private val context: Context
+) : MvpPresenter<TerminalView>() {
     private var dataBlocks = ArrayList<DataBlock>()
     private var messages = ArrayList<String>()
     private var adapter = TerminalAdapter(messages)
@@ -46,6 +50,7 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
             readBaseData(binaryDataProvider)
             readArchives(binaryDataProvider, deviceDataQuery)
             writeToUi("Чтение данных завершено")
+            startCreateReport()
         }.start()
     }
 
@@ -179,5 +184,30 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
         }
         if (parsedData != null) sb.append("[Parsed-data]: ").append(parsedData).append("\n")
         writeToUi(sb.toString())
+    }
+
+   fun startCreateReport() {
+        Thread {
+            val res = context.resources
+            val cw = ContextWrapper(context)
+            val directory = cw.getExternalFilesDir("Karat")
+            //            String reportsDirectoryPath = directory.toString() + "/" + "reports";
+//            String csvDirectoryPath = directory.toString() + "/" + "csv";
+            val userData = HashMap<String, String>()
+            userData["Имя"] = "Andrey"
+            userData["Улица"] = "Gachi"
+            userData["Дом"] = "100500"
+            val parsedData = HashMap<String, List<List<String>>>()
+            parsedData["DATA"] = parsedDataModel.archives
+            val templateProvider: ITemplateProvider = TemplateProvider(res)
+            val reportProvider: IReportBuilder =
+                ReportBuilder(directory.toString(), directory.toString(), templateProvider)
+            try {
+                reportProvider.constructCsvReport("test.csv", parsedData)
+                reportProvider.constructXlsxReport("test.xlsx", "test", userData, parsedData)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }.start()
     }
 }

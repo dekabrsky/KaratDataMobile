@@ -1,252 +1,209 @@
-//package com.example.karatdatamobile;
+//package com.example.karatdatamobile
 //
-//import android.content.Context;
-//import android.content.ContextWrapper;
-//import android.content.SharedPreferences;
-//import android.content.res.Resources;
-//import android.hardware.usb.UsbManager;
-//import android.os.Bundle;
-//import android.util.Log;
-//import android.widget.ArrayAdapter;
-//import android.widget.ImageButton;
-//import android.widget.ImageView;
-//import android.widget.ListView;
+//import android.content.ContextWrapper
+//import android.content.SharedPreferences
+//import android.hardware.usb.UsbManager
+//import android.os.Bundle
+//import android.util.Log
+//import android.widget.ArrayAdapter
+//import android.widget.ImageButton
+//import android.widget.ImageView
+//import android.widget.ListView
+//import androidx.appcompat.app.AppCompatActivity
+//import com.example.karatdatamobile.Enums.ArchiveType
+//import com.example.karatdatamobile.Enums.ConnectionMode
+//import com.example.karatdatamobile.Enums.DataBlockType
+//import com.example.karatdatamobile.Interfaces.IReportBuilder
+//import com.example.karatdatamobile.Interfaces.ITemplateProvider
+//import com.example.karatdatamobile.Models.*
+//import com.example.karatdatamobile.Services.*
+//import java.util.*
 //
-//import androidx.annotation.Nullable;
-//import androidx.appcompat.app.AppCompatActivity;
-//
-//import com.example.karatdatamobile.Enums.ArchiveType;
-//import com.example.karatdatamobile.Enums.ConnectionMode;
-//import com.example.karatdatamobile.Enums.DataBlockType;
-//import com.example.karatdatamobile.Interfaces.IConnectionProvider;
-//import com.example.karatdatamobile.Interfaces.IReportBuilder;
-//import com.example.karatdatamobile.Interfaces.ITemplateProvider;
-//import com.example.karatdatamobile.Models.DeviceSettings;
-//import com.example.karatdatamobile.Models.ArchivesConfig;
-//import com.example.karatdatamobile.Models.ArchivesRegisters;
-//import com.example.karatdatamobile.Models.DataBlock;
-//import com.example.karatdatamobile.Models.DataBlockInfo;
-//import com.example.karatdatamobile.Models.DataBlockInfoPresets;
-//import com.example.karatdatamobile.Models.DeviceDataQuery;
-//import com.example.karatdatamobile.Services.BinaryDataParser;
-//import com.example.karatdatamobile.Services.BinaryDataProvider;
-//import com.example.karatdatamobile.Services.ConnectionProviderFactory;
-//import com.example.karatdatamobile.Services.ReportBuilder;
-//import com.example.karatdatamobile.Services.TemplateProvider;
-//
-//import java.io.File;
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//
-//import static com.example.karatdatamobile.Services.BinaryDataParser.getHexContent;
-//
-//public class TerminalActivity extends AppCompatActivity {
-//
-//    static ArrayList<DataBlock> dataBlocks;
-//    static ArrayList<String> messages;
-//    static ArrayAdapter<String> adapter;
-//
-//    ImageView image;
-//    ImageButton share;
-//    ListView listView;
-//
-//    SharedPreferences sharedSettings;
-//    private static final String APP_PREFERENCES = "settingsMemory";
-//
-//    @Override
-//    protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_tcp_terminal_old);
-//
-//        dataBlocks = new ArrayList<>();
-//        messages = new ArrayList<>();
-//        adapter = new ArrayAdapter<>(this, R.layout.terminal_list_item, messages);
-//
-//        image = findViewById(R.id.image_load);
-//        share = findViewById(R.id.share);
-//        listView = findViewById(R.id.lw);
-//
-//        listView.setAdapter(adapter);
-//
-//        sharedSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-//        DeviceSettings appSettings = getAppSettings();
-//        DeviceDataQuery deviceDataQuery = (DeviceDataQuery) getIntent().getSerializableExtra("DeviceDataQuery");
-//
-//        startCreateReport();
-////        startReadData(appSettings, deviceDataQuery);
+//class TerminalActivity : AppCompatActivity() {
+//    var image: ImageView? = null
+//    var share: ImageButton? = null
+//    var listView: ListView? = null
+//    var sharedSettings: SharedPreferences? = null
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_tcp_terminal_old)
+//        dataBlocks = ArrayList()
+//        messages = ArrayList()
+//        adapter = ArrayAdapter(this, R.layout.terminal_list_item, messages!!)
+//        image = findViewById(R.id.image_load)
+//        share = findViewById(R.id.share)
+//        listView = findViewById(R.id.lw)
+//        listView.setAdapter(adapter)
+//        sharedSettings = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
+//        val appSettings = appSettings
+//        val deviceDataQuery = intent.getSerializableExtra("DeviceDataQuery") as DeviceDataQuery?
+//        startCreateReport()
+//        //        startReadData(appSettings, deviceDataQuery);
 //    }
 //
-//    private void startCreateReport() {
-//        new Thread(() -> {
-//
-//            Resources res = getResources();
-//            ContextWrapper cw = new ContextWrapper(getApplicationContext());
-//
-//            File directory = cw.getExternalFilesDir("Karat");
-////            String reportsDirectoryPath = directory.toString() + "/" + "reports";
+//    private fun startCreateReport() {
+//        Thread {
+//            val res = resources
+//            val cw = ContextWrapper(applicationContext)
+//            val directory = cw.getExternalFilesDir("Karat")
+//            //            String reportsDirectoryPath = directory.toString() + "/" + "reports";
 ////            String csvDirectoryPath = directory.toString() + "/" + "csv";
-//
-//            HashMap<String, String> userData = new HashMap<>();
-//            userData.put("Имя", "Andrey");
-//            userData.put("Улица", "Gachi");
-//            userData.put("Дом", "100500");
-//
-//            HashMap<String, String[][]> parsedData = new HashMap<>();
-//            parsedData.put("DATA", new String[][]{
-//                    new String[]{"Lol", "KeK", "HaHa", "Oh,no"},
-//                    new String[]{"100", "200", "300", "400"},
-//                    new String[]{"300", "200", "500", "400"},
-//            });
-//
-//            ITemplateProvider templateProvider = new TemplateProvider(res);
-//            IReportBuilder reportProvider = new ReportBuilder(directory.toString(), directory.toString(), templateProvider);
-//
+//            val userData = HashMap<String, String>()
+//            userData["Имя"] = "Andrey"
+//            userData["Улица"] = "Gachi"
+//            userData["Дом"] = "100500"
+//            val parsedData = HashMap<String, Array<Array<String>>>()
+//            parsedData["DATA"] = arrayOf(
+//                arrayOf("Lol", "KeK", "HaHa", "Oh,no"),
+//                arrayOf("100", "200", "300", "400"),
+//                arrayOf("300", "200", "500", "400")
+//            )
+//            val templateProvider: ITemplateProvider = TemplateProvider(res)
+//            val reportProvider: IReportBuilder =
+//                ReportBuilder(directory.toString(), directory.toString(), templateProvider)
 //            try {
-//                reportProvider.constructCsvReport("test.csv", parsedData);
-//                reportProvider.constructXlsxReport("test.xlsx", "test", userData, parsedData);
-//            } catch (Exception e) {
-//                e.printStackTrace();
+//                reportProvider.constructCsvReport("test.csv", parsedData)
+//                reportProvider.constructXlsxReport("test.xlsx", "test", userData, parsedData)
+//            } catch (e: Exception) {
+//                e.printStackTrace()
 //            }
-//
-//        }).start();
+//        }.start()
 //    }
 //
-//    private void startReadData(DeviceSettings appSettings, DeviceDataQuery deviceDataQuery) {
-//        new Thread(() -> {
-//            IConnectionProvider connectionProvider = ConnectionProviderFactory.Create(appSettings);
-//            BinaryDataProvider binaryDataProvider = new BinaryDataProvider(connectionProvider);
-//
-//            binaryDataProvider.onReadBlock(this::readBlockEventListener);
-//            binaryDataProvider.onErrors(this::errorEventListener);
-//
-//            readBaseData(binaryDataProvider);
-//            readArchives(binaryDataProvider, deviceDataQuery);
-//
-//            writeToUi("Чтение данных завершено");
-//        }).start();
+//    private fun startReadData(appSettings: DeviceSettings, deviceDataQuery: DeviceDataQuery) {
+//        Thread {
+//            val connectionProvider = ConnectionProviderFactory.Create(appSettings)
+//            val binaryDataProvider = BinaryDataProvider(connectionProvider)
+//            binaryDataProvider.onReadBlock { dataBlock: DataBlock ->
+//                readBlockEventListener(
+//                    dataBlock
+//                )
+//            }
+//            binaryDataProvider.onErrors { exception: Exception -> errorEventListener(exception) }
+//            readBaseData(binaryDataProvider)
+//            readArchives(binaryDataProvider, deviceDataQuery)
+//            writeToUi("Чтение данных завершено")
+//        }.start()
 //    }
 //
-//
-//    private void readBaseData(BinaryDataProvider dataReader) {
-//        DataBlockInfo[] baseDataBlocks = new DataBlockInfo[]{
-//                DataBlockInfoPresets.Model(),
-//                DataBlockInfoPresets.DateTime(),
-//                DataBlockInfoPresets.SerialNumber(),
-//        };
-//
-//        dataReader.read(baseDataBlocks);
+//    private fun readBaseData(dataReader: BinaryDataProvider) {
+//        val baseDataBlocks = arrayOf(
+//            DataBlockInfoPresets.Model(),
+//            DataBlockInfoPresets.DateTime(),
+//            DataBlockInfoPresets.SerialNumber()
+//        )
+//        dataReader.read(baseDataBlocks)
 //    }
 //
-//    private void readArchives(BinaryDataProvider dataReader, DeviceDataQuery deviceDataQuery) {
-//        HashMap<ArchiveType, Integer> archiveRegisters = new ArchivesRegisters().getNameToCode();
-//        ArchivesConfig config = getArchiveConfig(dataReader);
-//
-//        dataReader.write(deviceDataQuery.getStartDate()); // todo
-//
-//        HashMap<ArchiveType, ArrayList<DataBlock>> archives = new HashMap<>();
-//        for (ArchiveType archiveType : deviceDataQuery.getArchiveTypes()) {
-//            ArrayList<DataBlock> archiveData = readArchiveByType(dataReader, archiveRegisters.get(archiveType));
-//            archives.put(archiveType, archiveData);
+//    private fun readArchives(dataReader: BinaryDataProvider, deviceDataQuery: DeviceDataQuery) {
+//        val archiveRegisters = ArchivesRegisters().nameToCode
+//        val config = getArchiveConfig(dataReader)
+//        dataReader.write(deviceDataQuery.startDate) // todo
+//        val archives = HashMap<ArchiveType, ArrayList<DataBlock>>()
+//        for (archiveType in deviceDataQuery.archiveTypes) {
+//            val archiveData = readArchiveByType(dataReader, archiveRegisters[archiveType]!!)
+//            archives[archiveType] = archiveData
 //        }
-//
-//        HashMap<ArchiveType, String> parsedArchives = parseArchives(archives, config);
-//        writeParsedArchivesToUi(parsedArchives);
+//        val parsedArchives = parseArchives(archives, config)
+//        writeParsedArchivesToUi(parsedArchives)
 //    }
 //
-//    private ArchivesConfig getArchiveConfig(BinaryDataProvider dataReader) {
-//        DataBlock dataBlock = dataReader.read(DataBlockInfoPresets.ArchivesConfig());
-//        return new ArchivesConfig(getHexContent(dataBlock.getData()));
+//    private fun getArchiveConfig(dataReader: BinaryDataProvider): ArchivesConfig {
+//        val dataBlock = dataReader.read(DataBlockInfoPresets.ArchivesConfig())
+//        return ArchivesConfig(BinaryDataParser.getHexContent(dataBlock.data))
 //    }
 //
-//    private ArrayList<DataBlock> readArchiveByType(BinaryDataProvider dataReader, int type) {
-//        ArrayList<DataBlock> result = new ArrayList<>();
-//
-//        int counter = 0;
-//        int next = type + 0x05;
-//
+//    private fun readArchiveByType(dataReader: BinaryDataProvider, type: Int): ArrayList<DataBlock> {
+//        val result = ArrayList<DataBlock>()
+//        var counter = 0
+//        val next = type + 0x05
 //        while (true) {
-//            int offset = counter == 0 ? type : next;
+//            val offset = if (counter == 0) type else next
+//            val dataBlockInfo = DataBlockInfo(DataBlockType.ARCHIVE, offset, "F0".toInt(16) / 2)
+//            val dataBlock = dataReader.read(dataBlockInfo)
+//            if (BinaryDataParser.getHexContent(dataBlock.data)[0].toString() + BinaryDataParser.getHexContent(
+//                    dataBlock.data
+//                )[1] == "ff"
+//            ) break
+//            result.add(dataBlock)
+//            counter++
+//        }
+//        return result
+//    }
 //
-//            DataBlockInfo dataBlockInfo = new DataBlockInfo(DataBlockType.ARCHIVE, offset, Integer.parseInt("F0", 16) / 2);
-//            DataBlock dataBlock = dataReader.read(dataBlockInfo);
+//    private fun parseArchives(
+//        archives: HashMap<ArchiveType, ArrayList<DataBlock>>,
+//        config: ArchivesConfig
+//    ): HashMap<ArchiveType, String> {
+//        val result = HashMap<ArchiveType, String>()
+//        for (archiveType in archives.keys) {
+//            val parsedArchive: String = BinaryDataParser.parseArchive(archives[archiveType], config)
+//            result[archiveType] = parsedArchive
+//        }
+//        return result
+//    }
 //
-//            if ((String.valueOf(getHexContent(dataBlock.getData()).charAt(0)) + getHexContent(dataBlock.getData()).charAt(1)).equals("ff"))
-//                break;
+//    private fun readBlockEventListener(dataBlock: DataBlock) {
+//        dataBlocks!!.add(dataBlock)
+//        writeDataBlockToUi(dataBlock)
+//    }
 //
-//            result.add(dataBlock);
+//    private fun errorEventListener(exception: Exception) {
+//        writeToUi("[Error]: " + exception.message)
+//    }
 //
-//            counter++;
+//    private fun writeToUi(message: String) {
+//        runOnUiThread {
+//            messages!!.add(message)
+//            adapter!!.notifyDataSetChanged()
+//        }
+//    }
+//
+//    private fun writeDataBlockToUi(dataBlock: DataBlock) {
+//        val sb = StringBuilder()
+//        sb.append("[Type]: ").append(dataBlock.dataBlockInfo.dataBlockName.name).append("\n")
+//        sb.append("[Raw-data]: ").append(BinaryDataParser.getHexContent(dataBlock.data))
+//            .append("\n")
+//        val parsedData = BinaryDataParser.parse(dataBlock)
+//        if (parsedData != null) sb.append("[Parsed-data]: ").append(parsedData).append("\n")
+//        writeToUi(sb.toString())
+//    }
+//
+//    private fun writeParsedArchivesToUi(parsedArchives: HashMap<ArchiveType, String>) {
+//        val sb = StringBuilder()
+//        sb.append("PARSED ARCHIVES").append("\n")
+//        for (archiveType in parsedArchives.keys) {
+//            val str = String.format("[%s]: %s", archiveType.name, parsedArchives[archiveType])
+//            sb.append(str).append("\n")
+//        }
+//        writeToUi(sb.toString())
+//    }
+//
+//    private val appSettings: DeviceSettings
+//        private get() {
+//            val connectionMode = ConnectionMode.valueOf(
+//                sharedSettings!!.getString("ConnectionMode", ConnectionMode.TCP.toString())!!
+//            )
+//            val ip = sharedSettings!!.getString("Ip", null)
+//            val port = sharedSettings!!.getString("Port", null)
+//            val address = sharedSettings!!.getString("Address", null)
+//            val baudrate = sharedSettings!!.getInt("Baudrate", 19200)
+//            return if (connectionMode == ConnectionMode.TCP) DeviceSettings(
+//                connectionMode,
+//                port,
+//                ip,
+//                address
+//            ) else {
+//                val usbManager = getSystemService(USB_SERVICE) as UsbManager
+//                Log.d("Devices", usbManager.deviceList.toString())
+//                DeviceSettings(connectionMode, baudrate, usbManager, address)
+//            }
 //        }
 //
-//        return result;
-//    }
-//
-//    private HashMap<ArchiveType, String> parseArchives(HashMap<ArchiveType, ArrayList<DataBlock>> archives, ArchivesConfig config) {
-//        HashMap<ArchiveType, String> result = new HashMap<>();
-//
-//        for (ArchiveType archiveType : archives.keySet()) {
-//            String parsedArchive = BinaryDataParser.parseArchive(archives.get(archiveType), config);
-//            result.put(archiveType, parsedArchive);
-//        }
-//
-//        return result;
-//    }
-//
-//    private void readBlockEventListener(DataBlock dataBlock) {
-//        dataBlocks.add(dataBlock);
-//
-//        writeDataBlockToUi(dataBlock);
-//    }
-//
-//    private void errorEventListener(Exception exception) {
-//        writeToUi("[Error]: " + exception.getMessage());
-//    }
-//
-//    private void writeToUi(String message) {
-//        TerminalActivity.this.runOnUiThread(() -> {
-//            messages.add(message);
-//            adapter.notifyDataSetChanged();
-//        });
-//    }
-//
-//    private void writeDataBlockToUi(DataBlock dataBlock) {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("[Type]: ").append(dataBlock.getDataBlockInfo().getDataBlockName().name()).append("\n");
-//        sb.append("[Raw-data]: ").append(getHexContent(dataBlock.getData())).append("\n");
-//
-//        String parsedData = BinaryDataParser.parse(dataBlock);
-//        if (parsedData != null)
-//            sb.append("[Parsed-data]: ").append(parsedData).append("\n");
-//
-//        writeToUi(sb.toString());
-//    }
-//
-//    private void writeParsedArchivesToUi(HashMap<ArchiveType, String> parsedArchives) {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("PARSED ARCHIVES").append("\n");
-//
-//        for (ArchiveType archiveType : parsedArchives.keySet()) {
-//            String str = String.format("[%s]: %s", archiveType.name(), parsedArchives.get(archiveType));
-//            sb.append(str).append("\n");
-//        }
-//
-//        writeToUi(sb.toString());
-//    }
-//
-//    private DeviceSettings getAppSettings() {
-//        ConnectionMode connectionMode = ConnectionMode.valueOf(
-//                sharedSettings.getString("ConnectionMode", ConnectionMode.TCP.toString()));
-//        String ip = sharedSettings.getString("Ip", null);
-//        String port = sharedSettings.getString("Port", null);
-//        String address = sharedSettings.getString("Address", null);
-//        int baudrate = sharedSettings.getInt("Baudrate", 19200);
-//
-//        if (connectionMode.equals(ConnectionMode.TCP))
-//            return new DeviceSettings(connectionMode, port, ip, address);
-//        else {
-//            UsbManager usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-//            Log.d("Devices", String.valueOf(usbManager.getDeviceList()));
-//            return new DeviceSettings(connectionMode, baudrate, usbManager, address);
-//        }
+//    companion object {
+//        var dataBlocks: ArrayList<DataBlock>? = null
+//        var messages: ArrayList<String>? = null
+//        var adapter: ArrayAdapter<String>? = null
+//        private const val APP_PREFERENCES = "settingsMemory"
 //    }
 //}

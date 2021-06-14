@@ -1,165 +1,133 @@
-package com.example.karatdatamobile.Services;
+package com.example.karatdatamobile.Services
 
-import com.example.karatdatamobile.Interfaces.IReportBuilder;
-import com.example.karatdatamobile.Interfaces.ITemplateProvider;
-import com.example.karatdatamobile.Models.XlsxDataCells;
-import com.opencsv.CSVWriter;
+import com.example.karatdatamobile.Interfaces.IReportBuilder
+import com.example.karatdatamobile.Interfaces.ITemplateProvider
+import com.example.karatdatamobile.Models.XlsxDataCells
+import com.opencsv.CSVWriter
+import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.ss.usermodel.Workbook
+import org.apache.poi.ss.util.CellAddress
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.io.FileOutputStream
+import java.io.FileWriter
+import java.io.IOException
+import java.util.*
+import java.util.regex.Pattern
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellAddress;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class ReportBuilder implements IReportBuilder {
-
-    private static final Pattern userDataPattern = Pattern.compile("^\\$\\(\\w+\\)$");
-    private static final Pattern deviceDataPattern = Pattern.compile("^\\$\\[\\w+]$");
-
-    private final String reportsDirectoryPath;
-    private final String csvDirectoryPath;
-
-    private final ITemplateProvider templateProvider;
-
-    public ReportBuilder(
-            String reportsDirectoryPath,
-            String csvDirectoryPath,
-            ITemplateProvider templateProvider) {
-
-        this.reportsDirectoryPath = reportsDirectoryPath;
-        this.csvDirectoryPath = csvDirectoryPath;
-        this.templateProvider = templateProvider;
-    }
-
-    @Override
-    public void constructCsvReport(
-            String fileName,
-            HashMap<String, String[][]> parsedDataBlocks) throws IOException {
-
-        String filePath = csvDirectoryPath + "/" + fileName;
-
-        CSVWriter csvWriter = new CSVWriter(new FileWriter(filePath),
-                CSVWriter.DEFAULT_SEPARATOR,
-                CSVWriter.NO_QUOTE_CHARACTER,
-                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                CSVWriter.DEFAULT_LINE_END);
-
-        for (Map.Entry<String, String[][]> entry : parsedDataBlocks.entrySet()) {
-            csvWriter.writeNext(new String[]{entry.getKey()});
-            for (int i = 0; i < entry.getValue().length; i++) {
-                csvWriter.writeNext(entry.getValue()[i]);
+class ReportBuilder(
+    private val reportsDirectoryPath: String,
+    private val csvDirectoryPath: String,
+    private val templateProvider: ITemplateProvider
+) : IReportBuilder {
+    @Throws(IOException::class)
+    override fun constructCsvReport(
+        fileName: String,
+        parsedDataBlocks: HashMap<String, List<List<String>>>
+    ) {
+        val filePath = "$csvDirectoryPath/$fileName"
+        val csvWriter = CSVWriter(
+            FileWriter(filePath),
+            CSVWriter.DEFAULT_SEPARATOR,
+            CSVWriter.NO_QUOTE_CHARACTER,
+            CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+            CSVWriter.DEFAULT_LINE_END
+        )
+        for ((key, value) in parsedDataBlocks) {
+            csvWriter.writeNext(arrayOf(key))
+            for (i in value.indices) {
+                csvWriter.writeNext(value[i].toTypedArray())
             }
         }
-
-        csvWriter.close();
+        csvWriter.close()
     }
 
-    @Override
-    public void constructXlsxReport(
-            String fileName,
-            String templateName,
-            HashMap<String, String> userData,
-            HashMap<String, String[][]> parsedDataBlocks) throws IOException {
-
-        String filePath = reportsDirectoryPath + "/" + fileName;
-        InputStream emptyTemplate = templateProvider.createEmptyReport(templateName);
-
-        Workbook workbook = new XSSFWorkbook(emptyTemplate);
-        Sheet sheet = workbook.getSheetAt(0);
-
-        XlsxDataCells dataCells = getDataCells(sheet);
-
-        writeUserData(sheet, dataCells.getUserDataCells(), userData);
-        writeDeviceData(sheet, dataCells.getDeviceDataCells(), parsedDataBlocks);
-
-        workbook.write(new FileOutputStream(filePath));
-        workbook.close();
+    @Throws(IOException::class)
+    override fun constructXlsxReport(
+        fileName: String,
+        templateName: String,
+        userData: HashMap<String, String>,
+        parsedDataBlocks: HashMap<String, List<List<String>>>
+    ) {
+        val filePath = "$reportsDirectoryPath/$fileName"
+        val emptyTemplate = templateProvider.createEmptyReport(templateName)
+        val workbook: Workbook = XSSFWorkbook(emptyTemplate)
+        val sheet = workbook.getSheetAt(0)
+        val dataCells = getDataCells(sheet)
+        writeUserData(sheet, dataCells.userDataCells, userData)
+        writeDeviceData(sheet, dataCells.deviceDataCells, parsedDataBlocks)
+        workbook.write(FileOutputStream(filePath))
+        workbook.close()
     }
 
-    private XlsxDataCells getDataCells(Sheet sheet) {
-        HashMap<String, CellAddress> userDataCells = new HashMap<>();
-        HashMap<String, CellAddress> deviceDataCells = new HashMap<>();
-
-        for (Row row : sheet) {
-            for (Cell cell : row) {
-
-                String cellValue = cell.getStringCellValue();
-
-                Matcher userDataMatcher = userDataPattern.matcher(cellValue);
+    private fun getDataCells(sheet: Sheet): XlsxDataCells {
+        val userDataCells = HashMap<String, CellAddress>()
+        val deviceDataCells = HashMap<String, CellAddress>()
+        for (row in sheet) {
+            for (cell in row) {
+                val cellValue = cell.stringCellValue
+                val userDataMatcher = userDataPattern.matcher(cellValue)
                 if (userDataMatcher.find()) {
-                    String paramName = userDataMatcher.group()
-                            .replace("$", "")
-                            .replace("(", "")
-                            .replace(")", "");
-                    userDataCells.put(paramName, cell.getAddress());
-                    continue;
+                    val paramName = userDataMatcher.group()
+                        .replace("$", "")
+                        .replace("(", "")
+                        .replace(")", "")
+                    userDataCells[paramName] = cell.address
+                    continue
                 }
-
-                Matcher deviceDataMatcher = deviceDataPattern.matcher(cellValue);
+                val deviceDataMatcher = deviceDataPattern.matcher(cellValue)
                 if (deviceDataMatcher.find()) {
-                    String paramName = deviceDataMatcher.group()
-                            .replace("$", "")
-                            .replace("[", "")
-                            .replace("]", "");
-                    deviceDataCells.put(paramName, cell.getAddress());
+                    val paramName = deviceDataMatcher.group()
+                        .replace("$", "")
+                        .replace("[", "")
+                        .replace("]", "")
+                    deviceDataCells[paramName] = cell.address
                 }
             }
         }
-
-        return new XlsxDataCells(userDataCells, deviceDataCells);
+        return XlsxDataCells(userDataCells, deviceDataCells)
     }
 
-    private void writeUserData(
-            Sheet sheet,
-            HashMap<String, CellAddress> userDataCells,
-            HashMap<String, String> userData) {
-
-        for (Map.Entry<String, CellAddress> entry : userDataCells.entrySet()) {
-            if (userData.containsKey(entry.getKey())) {
-                CellAddress cellAddress = entry.getValue();
+    private fun writeUserData(
+        sheet: Sheet,
+        userDataCells: HashMap<String, CellAddress>,
+        userData: HashMap<String, String>
+    ) {
+        for ((key, cellAddress) in userDataCells) {
+            if (userData.containsKey(key)) {
                 sheet
-                        .getRow(cellAddress.getRow())
-                        .getCell(cellAddress.getColumn())
-                        .setCellValue(userData.get(entry.getKey()));
+                    .getRow(cellAddress.row)
+                    .getCell(cellAddress.column)
+                    .setCellValue(userData[key])
             }
         }
     }
 
-    private void writeDeviceData(
-            Sheet sheet,
-            HashMap<String, CellAddress> deviceDataCells,
-            HashMap<String, String[][]> parsedDataBlocks) {
-
-        for (Map.Entry<String, CellAddress> entry : deviceDataCells.entrySet()) {
-
-            String paramName = entry.getKey();
-
+    private fun writeDeviceData(
+        sheet: Sheet,
+        deviceDataCells: HashMap<String, CellAddress>,
+        parsedDataBlocks: HashMap<String, List<List<String>>>
+    ) {
+        for ((paramName, value) in deviceDataCells) {
             if (parsedDataBlocks.containsKey(paramName)) {
-                String[][] data = parsedDataBlocks.get(paramName);
-
-                int rowId = entry.getValue().getRow();
-                int columnId = entry.getValue().getColumn();
-
-                sheet.shiftRows(rowId, sheet.getLastRowNum() + 1, data.length - 1, true, true);
-
-                for (int i = 0; i < data.length; i++) {
-                    Row row = sheet.createRow(i + rowId);
-                    for (int j = 0; j < data[i].length; j++) {
-                        Cell rowCell = row.createCell(j + columnId);
-                        rowCell.setCellValue(data[i][j]);
+                val data = parsedDataBlocks[paramName]
+                val rowId = value.row
+                val columnId = value.column
+                assert(data != null)
+                if (data!!.size > 1)
+                    sheet.shiftRows(rowId, sheet.lastRowNum + 1, data!!.size - 1, true, true)
+                for (i in data.indices) {
+                    val row = sheet.createRow(i + rowId)
+                    for (j in data[i].indices) {
+                        val rowCell = row.createCell(j + columnId)
+                        rowCell.setCellValue(data[i][j])
                     }
                 }
             }
         }
+    }
+
+    companion object {
+        private val userDataPattern = Pattern.compile("^\\$\\(\\w+\\)$")
+        private val deviceDataPattern = Pattern.compile("^\\$\\[\\w+]$")
     }
 }

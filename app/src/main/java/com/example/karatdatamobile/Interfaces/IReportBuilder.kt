@@ -1,17 +1,20 @@
-package com.example.karatdatamobile.Interfaces;
+package com.example.karatdatamobile.Interfaces
 
-import java.io.IOException;
-import java.util.HashMap;
+import java.io.IOException
+import java.util.*
 
-public interface IReportBuilder {
+interface IReportBuilder {
+    @Throws(IOException::class)
+    fun constructCsvReport(
+        fileName: String,
+        parsedDataBlocks: HashMap<String, List<List<String>>>
+    )
 
-    void constructCsvReport(
-            String fileName,
-            HashMap<String, String[][]> parsedDataBlocks) throws IOException;
-
-    void constructXlsxReport(
-            String fileName,
-            String templateName,
-            HashMap<String, String> userData,
-            HashMap<String, String[][]> parsedDataBlocks) throws IOException;
+    @Throws(IOException::class)
+    fun constructXlsxReport(
+        fileName: String,
+        templateName: String,
+        userData: HashMap<String, String>,
+        parsedDataBlocks: HashMap<String, List<List<String>>>
+    )
 }

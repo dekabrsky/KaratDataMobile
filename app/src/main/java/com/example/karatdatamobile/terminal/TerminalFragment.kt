@@ -33,6 +33,12 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
             deviceDataQuery = it.getSerializable(key[0]) as DeviceDataQuery
             deviceSettings = it.getSerializable(key[1]) as DeviceSettings
         }
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory",
+            "com.fasterxml.aalto.stax.InputFactoryImpl")
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory",
+            "com.fasterxml.aalto.stax.OutputFactoryImpl")
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory",
+            "com.fasterxml.aalto.stax.EventFactoryImpl")
     }
 
     override fun onCreateView(
@@ -69,7 +75,7 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
                 arguments = Bundle().apply {
                     putSerializable(key[0], param1)
                     putSerializable(key[1], param2)
-                }
             }
+        }
     }
 }
