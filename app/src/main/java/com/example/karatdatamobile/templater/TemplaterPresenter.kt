@@ -2,25 +2,25 @@ package com.example.karatdatamobile.templater
 
 import android.content.Context
 import android.content.ContextWrapper
+import com.example.karatdatamobile.App
+import com.example.karatdatamobile.FlowFragment
 import com.example.karatdatamobile.interfaces.IReportBuilder
 import com.example.karatdatamobile.interfaces.ITemplateProvider
 import com.example.karatdatamobile.models.ParsedData
 import com.example.karatdatamobile.services.ReportBuilder
 import com.example.karatdatamobile.services.TemplateProvider
 import com.example.karatdatamobile.utils.Fields
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 import moxy.MvpPresenter
 import javax.inject.Inject
 
 class TemplaterPresenter @Inject constructor(
     private val context: Context
 ): MvpPresenter<TemplaterView>() {
-
-    private lateinit var templateProvider: TemplateProvider
-
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-       // templateProvider = TemplateProvider(context.resources)
-    }
+    private lateinit var templateProvider: ITemplateProvider
+    private lateinit var reportProvider: IReportBuilder
+    private lateinit var typeToValue: HashMap<String, String>
+    private lateinit var parsedData: HashMap<String, List<List<String>>>
 
     fun getAdapter(): TemplateFieldsAdapter {
         templateProvider = TemplateProvider(context.resources)
@@ -28,21 +28,30 @@ class TemplaterPresenter @Inject constructor(
         return TemplateFieldsAdapter(names)
     }
 
-    fun writeXLS(typeToValue: HashMap<String, String>, dataFromDevice: ParsedData) {
+    fun prepareData(typeToValue: HashMap<String, String>, dataFromDevice: ParsedData) {
+        this.typeToValue = typeToValue
         val res = context.resources
         val cw = ContextWrapper(context)
         val directory = cw.getExternalFilesDir("Karat")
-        val templateProvider: ITemplateProvider = TemplateProvider(res)
-        val reportProvider: IReportBuilder =
-            ReportBuilder(directory.toString(), directory.toString(), templateProvider)
-        val parsedData = java.util.HashMap<String, List<List<String>>>()
+        templateProvider= TemplateProvider(res)
+        reportProvider = ReportBuilder(directory.toString(), directory.toString(), templateProvider)
+        parsedData = java.util.HashMap<String, List<List<String>>>()
         parsedData[Fields.DATA] = dataFromDevice.archives
         parsedData[Fields.MODEL] = dataFromDevice.model
         parsedData[Fields.HEADER] = dataFromDevice.headers
         parsedData[Fields.DATE_TIME] = dataFromDevice.systemDate
         parsedData[Fields.SERIAL_NUMBER] = dataFromDevice.serNumber
 
-        reportProvider.constructXlsxReport("test.xlsx", "test", typeToValue, parsedData)
+        viewState.showDialog()
     }
 
+    fun writeXLS(){
+        viewState.showLoadSign()
+        reportProvider.constructXlsxReport("test.xlsx", "test", typeToValue, parsedData)
+
+        viewState.showOnSuccessWrite("Файл записан")
+
+        App.application.getRouter()
+            .replaceScreen(FragmentScreen { FlowFragment.newInstance(isToReports = true) })
+    }
 }

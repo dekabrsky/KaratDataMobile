@@ -7,4 +7,7 @@ import moxy.viewstate.strategy.StateStrategyType
 @StateStrategyType(OneExecutionStateStrategy::class)
 interface TerminalView: MvpView {
     fun onDataChange()
+    fun activateButtons()
+    fun showLoadSign()
+    fun hideLoadSign()
 }

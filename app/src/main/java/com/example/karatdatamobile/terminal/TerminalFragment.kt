@@ -50,6 +50,7 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
 
     private fun init(){
         fab_save.setOnClickListener { presenter.makeXLS() }
+        fab_see.setOnClickListener { presenter.toReportsList() }
         recycler.layoutManager = LinearLayoutManager(context)
         recycler.adapter = presenter.getRecyclerAdapter()
     }
@@ -68,7 +69,27 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
     }
 
     private fun startReadData() {
+        deactivateButtons()
+        showLoadSign()
         presenter.startReadData(deviceSettings, deviceDataQuery)
+    }
+
+    private fun deactivateButtons(){
+        fab_save.isEnabled = false
+        fab_see.isEnabled = false
+    }
+
+    override fun activateButtons() {
+        fab_save.isEnabled = true
+        fab_see.isEnabled = true
+    }
+
+    override fun showLoadSign() {
+        loadSign.visibility = View.VISIBLE
+    }
+
+    override fun hideLoadSign() {
+        loadSign.visibility = View.INVISIBLE
     }
 
     companion object {

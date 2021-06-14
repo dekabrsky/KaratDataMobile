@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import com.example.karatdatamobile.App
+import com.example.karatdatamobile.FlowFragment
 import com.example.karatdatamobile.enums.ArchiveType
 import com.example.karatdatamobile.enums.DataBlockType
 import com.example.karatdatamobile.interfaces.IReportBuilder
@@ -57,6 +58,10 @@ class TerminalPresenter @Inject constructor(
             readBaseData(binaryDataProvider)
             readArchives(binaryDataProvider, deviceDataQuery)
             writeToUi("Чтение данных завершено")
+            activity.runOnUiThread {
+                viewState.activateButtons()
+                viewState.hideLoadSign()
+            }
             startCreateReport()
         }.start()
     }
@@ -198,8 +203,6 @@ class TerminalPresenter @Inject constructor(
             val res = context.resources
             val cw = ContextWrapper(context)
             val directory = cw.getExternalFilesDir("Karat")
-            //            String reportsDirectoryPath = directory.toString() + "/" + "reports";
-//            String csvDirectoryPath = directory.toString() + "/" + "csv";
             val parsedData = HashMap<String, List<List<String>>>()
             parsedData[Fields.DATA] = parsedDataModel.archives
             parsedData[Fields.MODEL] = parsedDataModel.model
@@ -228,7 +231,13 @@ class TerminalPresenter @Inject constructor(
     }
 
     fun makeXLS() {
+        viewState.showLoadSign()
         App.application.getRouter()
             .replaceScreen(FragmentScreen { TemplaterFragment.newInstance(parsedDataModel) })
+    }
+
+    fun toReportsList(){
+        App.application.getRouter()
+            .navigateTo(FragmentScreen { FlowFragment.newInstance(isToReports = true) })
     }
 }

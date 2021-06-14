@@ -1,5 +1,6 @@
 package com.example.karatdatamobile.templater
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.karatdatamobile.models.ParsedData
 import com.example.karatdatamobile.databinding.FragmentTemplaterBinding
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_templater.*
+import kotlinx.android.synthetic.main.fragment_templater.loadSign
+import kotlinx.android.synthetic.main.fragment_terminal.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
@@ -55,8 +59,34 @@ class TemplaterFragment : MvpAppCompatFragment(), TemplaterView {
         template_fields.adapter
 
         templaterButton.setOnClickListener {
-            presenter.writeXLS((template_fields.adapter as TemplateFieldsAdapter).getTypeToValue(), dataFromDevice)
+            presenter.prepareData((template_fields.adapter as TemplateFieldsAdapter).getTypeToValue(), dataFromDevice)
         }
+    }
+
+    override fun showLoadSign() {
+        loadSign.visibility = View.VISIBLE
+    }
+
+    override fun hideLoadSign() {
+        loadSign.visibility = View.INVISIBLE
+    }
+
+    override fun showDialog(){
+        val builder = AlertDialog.Builder(requireContext())
+
+        with(builder)
+        {
+            setTitle("Подтверждение")
+            setMessage("Записать отчёт?")
+            setPositiveButton("Да") { _, _ -> presenter.writeXLS() }
+            setNegativeButton("Править") { _, _ -> }
+        }
+
+        builder.show()
+    }
+
+    override fun showOnSuccessWrite(msg: String) {
+        Snackbar.make(requireView(), msg, Snackbar.LENGTH_LONG).show()
     }
 
     companion object {
