@@ -24,6 +24,8 @@ import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
+import java.util.*
+import kotlin.collections.ArrayList
 
 @SuppressLint("NewApi")
 class ArchivesFragment : MvpAppCompatFragment(), ArchivesView {
@@ -127,6 +129,7 @@ class ArchivesFragment : MvpAppCompatFragment(), ArchivesView {
             mDateSetListener, year, month, day
         )
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+        dialog.datePicker.maxDate = Date().time
         dialog.show()
     }
 

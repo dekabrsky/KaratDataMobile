@@ -62,9 +62,9 @@ class ArchivesPresenter @Inject constructor(
     fun loadSaved(deviceSettings: DeviceSettings){
         with (deviceSettings) {
             val result = when (connectionMode){
-                ConnectionMode.NONE -> return
                 ConnectionMode.TCP -> tcpInOneString(ip, port, address)
                 ConnectionMode.USB -> usbInOneString(address, "FTDI RS485")
+                else -> return
             }
             viewState.updateConnectionSettingsText(result)
         }
@@ -74,7 +74,7 @@ class ArchivesPresenter @Inject constructor(
 
     private fun usbInOneString(slaveId: String, name: String): String = "USB #$slaveId - $name"
 
-    fun onDateClick(hasFocus: Boolean = true){
+    fun onDateClick(){
         viewState.showCalendarDialog()
     }
 
