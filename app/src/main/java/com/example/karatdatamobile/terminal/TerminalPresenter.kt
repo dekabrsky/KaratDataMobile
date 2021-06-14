@@ -3,13 +3,17 @@ package com.example.karatdatamobile.terminal
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import com.example.karatdatamobile.App
 import com.example.karatdatamobile.Enums.ArchiveType
 import com.example.karatdatamobile.Enums.DataBlockType
+import com.example.karatdatamobile.FlowFragment
 import com.example.karatdatamobile.Interfaces.IReportBuilder
 import com.example.karatdatamobile.Interfaces.ITemplateProvider
 import com.example.karatdatamobile.Models.*
 import com.example.karatdatamobile.Services.*
+import com.example.karatdatamobile.templater.TemplaterFragment
 import com.example.karatdatamobile.utils.Lists.addToBegin
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 import moxy.MvpPresenter
 import java.util.*
 import javax.inject.Inject
@@ -47,10 +51,10 @@ class TerminalPresenter @Inject constructor(
                     )
                 }
             }
-            readBaseData(binaryDataProvider)
-            readArchives(binaryDataProvider, deviceDataQuery)
+            //readBaseData(binaryDataProvider)
+            //readArchives(binaryDataProvider, deviceDataQuery)
             writeToUi("Чтение данных завершено")
-            startCreateReport()
+            //startCreateReport()
         }.start()
     }
 
@@ -209,5 +213,10 @@ class TerminalPresenter @Inject constructor(
                 e.printStackTrace()
             }
         }.start()
+    }
+
+    fun makeXLS() {
+        App.application.getRouter()
+            .replaceScreen(FragmentScreen { TemplaterFragment.newInstance() })
     }
 }

@@ -48,11 +48,16 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
         return inflater.inflate(R.layout.fragment_terminal, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        startReadData()
+    private fun init(){
+        fab_save.setOnClickListener { presenter.makeXLS() }
         recycler.layoutManager = LinearLayoutManager(context)
         recycler.adapter = presenter.getRecyclerAdapter()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init()
+        startReadData()
     }
 
     override fun onDataChange(){

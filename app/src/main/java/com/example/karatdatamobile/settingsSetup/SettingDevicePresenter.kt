@@ -86,6 +86,6 @@ class SettingDevicePresenter @Inject constructor(
             else -> return
         }
         App.application.getRouter()
-            .replaceScreen(FragmentScreen { FlowFragment.newInstance(settings) })
+            .navigateTo(FragmentScreen { FlowFragment.newInstance(settings) })
     }
 }
