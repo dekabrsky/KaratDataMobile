@@ -1,13 +1,20 @@
 package com.example.karatdatamobile.templater
 
 import android.content.Context
+import android.content.ContextWrapper
+import com.example.karatdatamobile.Interfaces.IReportBuilder
+import com.example.karatdatamobile.Interfaces.ITemplateProvider
+import com.example.karatdatamobile.Models.ParsedData
+import com.example.karatdatamobile.Services.ReportBuilder
 import com.example.karatdatamobile.Services.TemplateProvider
+import com.example.karatdatamobile.utils.Fields
 import moxy.MvpPresenter
 import javax.inject.Inject
 
 class TemplaterPresenter @Inject constructor(
     private val context: Context
 ): MvpPresenter<TemplaterView>() {
+
     private lateinit var templateProvider: TemplateProvider
 
     override fun onFirstViewAttach() {
@@ -20,4 +27,22 @@ class TemplaterPresenter @Inject constructor(
         val names = templateProvider.getUserFieldNames("Базовый шаблон")
         return TemplateFieldsAdapter(names)
     }
+
+    fun writeXLS(typeToValue: HashMap<String, String>, dataFromDevice: ParsedData) {
+        val res = context.resources
+        val cw = ContextWrapper(context)
+        val directory = cw.getExternalFilesDir("Karat")
+        val templateProvider: ITemplateProvider = TemplateProvider(res)
+        val reportProvider: IReportBuilder =
+            ReportBuilder(directory.toString(), directory.toString(), templateProvider)
+        val parsedData = java.util.HashMap<String, List<List<String>>>()
+        parsedData[Fields.DATA] = dataFromDevice.archives
+        parsedData[Fields.MODEL] = dataFromDevice.model
+        parsedData[Fields.HEADER] = dataFromDevice.headers
+        parsedData[Fields.DATE_TIME] = dataFromDevice.systemDate
+        parsedData[Fields.SERIAL_NUMBER] = dataFromDevice.serNumber
+
+        reportProvider.constructXlsxReport("test.xlsx", "test", typeToValue, parsedData)
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.example.karatdatamobile.Models
 
-class ParsedData{
+import java.io.Serializable
+
+class ParsedData: Serializable{
     lateinit var model: List<List<String>>
     lateinit var serNumber: List<List<String>>
     lateinit var systemDate: List<List<String>>

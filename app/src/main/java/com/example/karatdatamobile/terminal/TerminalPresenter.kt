@@ -6,19 +6,22 @@ import android.content.ContextWrapper
 import com.example.karatdatamobile.App
 import com.example.karatdatamobile.Enums.ArchiveType
 import com.example.karatdatamobile.Enums.DataBlockType
-import com.example.karatdatamobile.FlowFragment
 import com.example.karatdatamobile.Interfaces.IReportBuilder
 import com.example.karatdatamobile.Interfaces.ITemplateProvider
 import com.example.karatdatamobile.Models.*
 import com.example.karatdatamobile.Services.*
 import com.example.karatdatamobile.templater.TemplaterFragment
+import com.example.karatdatamobile.utils.Fields
 import com.example.karatdatamobile.utils.Lists.addToBegin
 import com.github.terrakok.cicerone.androidx.FragmentScreen
+import com.google.gson.GsonBuilder
 import moxy.MvpPresenter
+import java.io.FileWriter
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.collections.set
+
 
 class TerminalPresenter @Inject constructor(
     private val context: Context
@@ -51,10 +54,10 @@ class TerminalPresenter @Inject constructor(
                     )
                 }
             }
-            //readBaseData(binaryDataProvider)
-            //readArchives(binaryDataProvider, deviceDataQuery)
+            readBaseData(binaryDataProvider)
+            readArchives(binaryDataProvider, deviceDataQuery)
             writeToUi("Чтение данных завершено")
-            //startCreateReport()
+            startCreateReport()
         }.start()
     }
 
@@ -197,26 +200,35 @@ class TerminalPresenter @Inject constructor(
             val directory = cw.getExternalFilesDir("Karat")
             //            String reportsDirectoryPath = directory.toString() + "/" + "reports";
 //            String csvDirectoryPath = directory.toString() + "/" + "csv";
-            val userData = HashMap<String, String>()
-            userData["Имя"] = "Andrey"
-            userData["Улица"] = "Gachi"
-            userData["Дом"] = "100500"
             val parsedData = HashMap<String, List<List<String>>>()
-            parsedData["DATA"] = parsedDataModel.archives
+            parsedData[Fields.DATA] = parsedDataModel.archives
+            parsedData[Fields.MODEL] = parsedDataModel.model
+            parsedData[Fields.HEADER] = parsedDataModel.headers
+            parsedData[Fields.DATE_TIME] = parsedDataModel.systemDate
+            parsedData[Fields.SERIAL_NUMBER] = parsedDataModel.serNumber
             val templateProvider: ITemplateProvider = TemplateProvider(res)
             val reportProvider: IReportBuilder =
                 ReportBuilder(directory.toString(), directory.toString(), templateProvider)
+
+            FileWriter("${directory.toString()}/${generateFileName("json")}").use { writer ->
+                val gson = GsonBuilder().create()
+                gson.toJson(parsedDataModel, writer)
+            }
+
             try {
                 reportProvider.constructCsvReport("test.csv", parsedData)
-                reportProvider.constructXlsxReport("test.xlsx", "test", userData, parsedData)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }.start()
     }
 
+    fun generateFileName(fileExtension: String): String {
+        return "${parsedDataModel.model[0][0]}_${parsedDataModel.serNumber[0][0]}_${Calendar.getInstance().time}.${fileExtension}"
+    }
+
     fun makeXLS() {
         App.application.getRouter()
-            .replaceScreen(FragmentScreen { TemplaterFragment.newInstance() })
+            .replaceScreen(FragmentScreen { TemplaterFragment.newInstance(parsedDataModel) })
     }
 }

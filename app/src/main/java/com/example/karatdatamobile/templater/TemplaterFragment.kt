@@ -5,21 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.karatdatamobile.R
-import com.example.karatdatamobile.Services.TemplateProvider
+import com.example.karatdatamobile.Models.ParsedData
 import com.example.karatdatamobile.databinding.FragmentTemplaterBinding
 import kotlinx.android.synthetic.main.fragment_templater.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
+import java.io.Serializable
 
 private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class TemplaterFragment : MvpAppCompatFragment(), TemplaterView {
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var dataFromDevice: ParsedData
 
     private var _binding: FragmentTemplaterBinding? = null
     private val binding get() = _binding!!
@@ -34,8 +32,7 @@ class TemplaterFragment : MvpAppCompatFragment(), TemplaterView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            dataFromDevice = it.getSerializable(ARG_PARAM1) as ParsedData
         }
     }
 
@@ -55,16 +52,19 @@ class TemplaterFragment : MvpAppCompatFragment(), TemplaterView {
     private fun init(){
         template_fields.layoutManager = LinearLayoutManager(context)
         template_fields.adapter = presenter.getAdapter()
+        template_fields.adapter
+
+        templaterButton.setOnClickListener {
+            presenter.writeXLS((template_fields.adapter as TemplateFieldsAdapter).getTypeToValue(), dataFromDevice)
+        }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = TemplaterFragment()
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: Serializable) =
             TemplaterFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putSerializable(ARG_PARAM1, param1)
                 }
             }
     }

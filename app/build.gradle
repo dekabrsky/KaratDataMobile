@@ -34,6 +34,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
@@ -72,6 +76,8 @@ dependencies {
 
     implementation "com.github.moxy-community:moxy:2.2.1"
     kapt "com.github.moxy-community:moxy-compiler:2.2.1"
+
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
 }
