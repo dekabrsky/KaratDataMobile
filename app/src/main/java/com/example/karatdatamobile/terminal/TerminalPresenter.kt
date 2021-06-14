@@ -4,12 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import com.example.karatdatamobile.App
-import com.example.karatdatamobile.Enums.ArchiveType
-import com.example.karatdatamobile.Enums.DataBlockType
-import com.example.karatdatamobile.Interfaces.IReportBuilder
-import com.example.karatdatamobile.Interfaces.ITemplateProvider
-import com.example.karatdatamobile.Models.*
-import com.example.karatdatamobile.Services.*
+import com.example.karatdatamobile.enums.ArchiveType
+import com.example.karatdatamobile.enums.DataBlockType
+import com.example.karatdatamobile.interfaces.IReportBuilder
+import com.example.karatdatamobile.interfaces.ITemplateProvider
+import com.example.karatdatamobile.models.*
+import com.example.karatdatamobile.services.*
 import com.example.karatdatamobile.templater.TemplaterFragment
 import com.example.karatdatamobile.utils.Fields
 import com.example.karatdatamobile.utils.Lists.addToBegin
@@ -171,10 +171,10 @@ class TerminalPresenter @Inject constructor(
     }
 
     private fun writeToUi(message: String) {
-        activity.runOnUiThread(Runnable {
+        activity.runOnUiThread {
             messages.add(message)
             viewState.onDataChange()
-        })
+        }
     }
 
     private fun writeDataBlockToUi(dataBlock: DataBlock) {
@@ -193,7 +193,7 @@ class TerminalPresenter @Inject constructor(
         writeToUi(sb.toString())
     }
 
-   fun startCreateReport() {
+   private fun startCreateReport() {
         Thread {
             val res = context.resources
             val cw = ContextWrapper(context)

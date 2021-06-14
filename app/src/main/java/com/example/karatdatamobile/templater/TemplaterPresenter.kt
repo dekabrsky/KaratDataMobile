@@ -2,11 +2,11 @@ package com.example.karatdatamobile.templater
 
 import android.content.Context
 import android.content.ContextWrapper
-import com.example.karatdatamobile.Interfaces.IReportBuilder
-import com.example.karatdatamobile.Interfaces.ITemplateProvider
-import com.example.karatdatamobile.Models.ParsedData
-import com.example.karatdatamobile.Services.ReportBuilder
-import com.example.karatdatamobile.Services.TemplateProvider
+import com.example.karatdatamobile.interfaces.IReportBuilder
+import com.example.karatdatamobile.interfaces.ITemplateProvider
+import com.example.karatdatamobile.models.ParsedData
+import com.example.karatdatamobile.services.ReportBuilder
+import com.example.karatdatamobile.services.TemplateProvider
 import com.example.karatdatamobile.utils.Fields
 import moxy.MvpPresenter
 import javax.inject.Inject

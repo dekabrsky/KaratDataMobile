@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.karatdatamobile.Models.ParsedData
+import com.example.karatdatamobile.models.ParsedData
 import com.example.karatdatamobile.databinding.FragmentTemplaterBinding
 import kotlinx.android.synthetic.main.fragment_templater.*
 import moxy.MvpAppCompatFragment
@@ -39,7 +39,7 @@ class TemplaterFragment : MvpAppCompatFragment(), TemplaterView {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTemplaterBinding.inflate(inflater, container, false)
         return binding.root
     }

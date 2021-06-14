@@ -5,9 +5,9 @@ import android.content.SharedPreferences
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import com.example.karatdatamobile.App
-import com.example.karatdatamobile.Enums.ConnectionMode
+import com.example.karatdatamobile.enums.ConnectionMode
 import com.example.karatdatamobile.FlowFragment
-import com.example.karatdatamobile.Models.DeviceSettings
+import com.example.karatdatamobile.models.DeviceSettings
 import com.example.karatdatamobile.utils.Prefs
 import com.example.karatdatamobile.utils.Prefs.getOrDefault
 import com.example.karatdatamobile.utils.Prefs.getOrEmpty

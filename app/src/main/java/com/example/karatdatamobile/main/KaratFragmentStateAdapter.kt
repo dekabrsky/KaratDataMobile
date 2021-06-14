@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.karatdatamobile.Models.DeviceSettings
-import com.example.karatdatamobile.Models.TabsNames
+import com.example.karatdatamobile.models.DeviceSettings
+import com.example.karatdatamobile.models.TabsNames
 
 
 class KaratFragmentStateAdapter(

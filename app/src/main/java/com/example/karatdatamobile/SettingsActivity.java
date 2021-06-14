@@ -16,7 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.karatdatamobile.Enums.ConnectionMode;
+import com.example.karatdatamobile.enums.ConnectionMode;
 
 public class SettingsActivity extends AppCompatActivity {
 

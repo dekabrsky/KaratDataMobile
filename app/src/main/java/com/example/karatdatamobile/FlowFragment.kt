@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.example.karatdatamobile.Models.DeviceSettings
+import com.example.karatdatamobile.models.DeviceSettings
 import com.example.karatdatamobile.utils.Prefs
-import com.example.karatdatamobile.Models.TabsNames
+import com.example.karatdatamobile.models.TabsNames
 import com.example.karatdatamobile.main.KaratFragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.flow_fragment.*

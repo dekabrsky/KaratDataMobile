@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.karatdatamobile.Models.DeviceDataQuery
-import com.example.karatdatamobile.Models.DeviceSettings
+import com.example.karatdatamobile.models.DeviceDataQuery
+import com.example.karatdatamobile.models.DeviceSettings
 import com.example.karatdatamobile.R
 import kotlinx.android.synthetic.main.fragment_terminal.*
 import moxy.MvpAppCompatFragment
