@@ -67,8 +67,10 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         binding.imgSetting.setOnClickListener { showSettingsScreen() }
 
         binding.editTextDate.setOnFocusChangeListener { _, hasFocus ->
-            binding.editTextSetting.clearFocus()
-            presenter.onDateClick(hasFocus)
+            if (hasFocus) {
+                binding.editTextSetting.clearFocus()
+                presenter.onDateClick(hasFocus)
+            }
         }
         binding.imgData.setOnClickListener { presenter.onDateClick() }
 
