@@ -127,7 +127,7 @@ class ReportBuilder(
     }
 
     companion object {
-        private val userDataPattern = Pattern.compile("^\\$\\(\\w+\\)$")
+        private val userDataPattern = Pattern.compile("^\\$\\(.+\\)$")
         private val deviceDataPattern = Pattern.compile("^\\$\\[\\w+]$")
     }
 }

@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 //todo
 public class TemplateProvider implements ITemplateProvider {
 
-    private static final Pattern userDataPattern = Pattern.compile("^\\$\\(\\w+\\)$");
+    private static final Pattern userDataPattern = Pattern.compile("^\\$\\(.+\\)$");
 
     private final Resources resources;
 
@@ -39,7 +39,7 @@ public class TemplateProvider implements ITemplateProvider {
     public ArrayList<String> getUserFieldNames(String templateName) throws IOException {
         ArrayList<String> userFieldNames = new ArrayList<>();
 
-        InputStream template = resources.openRawResource(R.raw.template);
+        InputStream template = resources.openRawResource(R.raw.real_template);
 
         Workbook workbook = new XSSFWorkbook(template);
         Sheet sheet = workbook.getSheetAt(0);
@@ -65,6 +65,6 @@ public class TemplateProvider implements ITemplateProvider {
 
     @Override
     public InputStream createEmptyReport(String templateName) {
-        return resources.openRawResource(R.raw.template);
+        return resources.openRawResource(R.raw.real_template);
     }
 }
