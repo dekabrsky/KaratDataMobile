@@ -31,15 +31,11 @@ public class BinaryDataParser {
         }
     }
 
-    public static String parseArchive(ArrayList<DataBlock> dataBlocks, ArchivesConfig config) {
-        StringBuilder sb = new StringBuilder();
-
-        for (DataBlock dataBlock : dataBlocks) {
-            RecordRow recordRow = new RecordRow(config, getHexContent(dataBlock.getData()));
-            sb.append(Arrays.asList(recordRow.getRowArray()).toString()).append("\n");
-        }
-
-        return sb.toString();
+    public static ArrayList<RecordRow> parseArchive(ArrayList<DataBlock> dataBlocks, ArchivesConfig config) {
+        ArrayList<RecordRow> rows = new ArrayList<>();
+        for (DataBlock dataBlock : dataBlocks)
+            rows.add(new RecordRow(config, getHexContent(dataBlock.getData())));
+        return rows;
     }
 
     private static String printSerNumber(int[] data) {

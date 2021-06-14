@@ -1,14 +1,12 @@
 package com.example.karatdatamobile.terminal
 
 import android.app.Activity
-import android.content.Context
 import com.example.karatdatamobile.Enums.ArchiveType
 import com.example.karatdatamobile.Enums.DataBlockType
 import com.example.karatdatamobile.Models.*
 import com.example.karatdatamobile.Services.BinaryDataParser
 import com.example.karatdatamobile.Services.BinaryDataProvider
 import com.example.karatdatamobile.Services.ConnectionProviderFactory
-import com.example.karatdatamobile.TerminalActivity
 import moxy.MvpPresenter
 import java.util.*
 import javax.inject.Inject
@@ -122,11 +120,22 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
     ): HashMap<ArchiveType, String> {
         val result = HashMap<ArchiveType, String>()
         for (archiveType in archives.keys) {
-            val parsedArchive = BinaryDataParser.parseArchive(archives[archiveType], config)
-            result[archiveType] = parsedArchive
+            val parsedArchiveRows = BinaryDataParser.parseArchive(archives[archiveType], config)
+            result[archiveType] = recordsToString(parsedArchiveRows)
         }
         return result
     }
+
+    private fun recordsToString(parsedArchiveRows: ArrayList<RecordRow>): String {
+        val sb = StringBuilder()
+        for (row in parsedArchiveRows) {
+            for (data in row.rowArray)
+                sb.append(data).append(", ")
+            sb.append(";\n")
+        }
+        return sb.toString()
+    }
+
 
     private fun readBlockEventListener(dataBlock: DataBlock) {
         dataBlocks.add(dataBlock)
