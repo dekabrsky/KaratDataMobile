@@ -5,17 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.example.karatdatamobile.Models.DeviceSettings
+import com.example.karatdatamobile.Models.Prefs
 import com.example.karatdatamobile.Models.TabsNames
+import com.example.karatdatamobile.main.ArchivesFragment
 import com.example.karatdatamobile.main.KaratFragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.flow_fragment.*
 import moxy.MvpAppCompatFragment
 
 class FlowFragment : MvpAppCompatFragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    private var settings: DeviceSettings? = null
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val viewPager = viewPager2
-        viewPager.adapter = KaratFragmentStateAdapter(this.activity as AppCompatActivity)
+        viewPager.adapter = KaratFragmentStateAdapter(
+            this.activity as AppCompatActivity,
+            settings
+        )
 
         val tabLayout = tabs
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -27,6 +34,19 @@ class FlowFragment : MvpAppCompatFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        arguments?.let {
+            settings = it.getSerializable(Prefs.DEVICE_SETTINGS) as DeviceSettings?
+        }
         return inflater.inflate(R.layout.flow_fragment, container, false)
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(settings: DeviceSettings) =
+            FlowFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(Prefs.DEVICE_SETTINGS, settings)
+                }
+            }
     }
 }
