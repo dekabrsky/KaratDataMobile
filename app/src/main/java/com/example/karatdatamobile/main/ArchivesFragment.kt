@@ -26,7 +26,7 @@ import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
 
 @SuppressLint("NewApi")
-class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
+class ArchivesFragment : MvpAppCompatFragment(), ArchivesView {
     private var settings: DeviceSettings? = null
 
     @InjectPresenter
@@ -53,26 +53,26 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         return binding.root
     }
 
-    private fun init(){
+    private fun init() {
         if (settings == null)
             presenter.loadSaved()
         else presenter.loadSaved(settings!!)
 
-        binding.editTextSetting.setOnFocusChangeListener { _, hasFocus ->
-            if(hasFocus) {
-                binding.editTextSetting.clearFocus()
-                showSettingsScreen()
-            }
+        binding.editTextSetting.setOnClickListener {
+            showSettingsScreen()
         }
-        binding.imgSetting.setOnClickListener { showSettingsScreen() }
 
-        binding.editTextDate.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                binding.editTextSetting.clearFocus()
-                presenter.onDateClick(hasFocus)
-            }
+        binding.imgSetting.setOnClickListener {
+            showSettingsScreen()
         }
-        binding.imgData.setOnClickListener { presenter.onDateClick() }
+
+        binding.editTextDate.setOnClickListener {
+            presenter.onDateClick()
+        }
+
+        binding.imgData.setOnClickListener {
+            presenter.onDateClick()
+        }
 
         mDateSetListener = OnDateSetListener { _, year, month, day ->
             presenter.onDateChanged(year, month, day)
@@ -87,7 +87,7 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
         }
     }
 
-    private fun getArchivesType(): List<ArchiveType>{
+    private fun getArchivesType(): List<ArchiveType> {
         val archiveTypes = mutableListOf<ArchiveType>()
 
         if (binding.hourly.isChecked)
@@ -104,7 +104,7 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
 
     private fun getDeviceSettings(): DeviceSettings? =
         if (settings != null) settings!!
-        else  presenter.getSettingsFromPrefs()
+        else presenter.getSettingsFromPrefs()
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -112,9 +112,10 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
     }
 
     override fun showSettingsScreen() =
-        App.application.getRouter().navigateTo( FragmentScreen{ SettingDeviceFragment.newInstance() })
+        App.application.getRouter()
+            .navigateTo(FragmentScreen { SettingDeviceFragment.newInstance() })
 
-    override fun showCalendarDialog(){
+    override fun showCalendarDialog() {
         val cal = Calendar.getInstance()
         val year = cal[Calendar.YEAR]
         val month = cal[Calendar.MONTH]
@@ -131,7 +132,8 @@ class ArchivesFragment: MvpAppCompatFragment(), ArchivesView{
 
     override fun updateDateText(date: String) = binding.editTextDate.setText(date)
 
-    override fun showDateError() = Snackbar.make(requireView(), "Дата не выбрана", Snackbar.LENGTH_LONG).show()
+    override fun showDateError() =
+        Snackbar.make(requireView(), "Дата не выбрана", Snackbar.LENGTH_LONG).show()
 
     override fun updateConnectionSettingsText(text: String) = binding.editTextSetting.setText(text)
 
