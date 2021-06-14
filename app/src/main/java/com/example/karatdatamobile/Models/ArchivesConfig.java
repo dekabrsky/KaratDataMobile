@@ -1,6 +1,7 @@
 package com.example.karatdatamobile.Models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ArchivesConfig {
     private final ArrayList<String> titles = new ArrayList<>();

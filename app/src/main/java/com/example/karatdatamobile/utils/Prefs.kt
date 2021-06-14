@@ -1,4 +1,4 @@
-package com.example.karatdatamobile.Models
+package com.example.karatdatamobile.utils
 
 import android.content.SharedPreferences
 

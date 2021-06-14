@@ -8,9 +8,9 @@ import com.example.karatdatamobile.Enums.ArchiveType
 import com.example.karatdatamobile.Enums.ConnectionMode
 import com.example.karatdatamobile.Models.DeviceDataQuery
 import com.example.karatdatamobile.Models.DeviceSettings
-import com.example.karatdatamobile.Models.Prefs
-import com.example.karatdatamobile.Models.Prefs.getOrDefault
-import com.example.karatdatamobile.Models.Prefs.getOrEmpty
+import com.example.karatdatamobile.utils.Prefs
+import com.example.karatdatamobile.utils.Prefs.getOrDefault
+import com.example.karatdatamobile.utils.Prefs.getOrEmpty
 import com.example.karatdatamobile.terminal.TerminalFragment
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import moxy.InjectViewState

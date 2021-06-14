@@ -7,6 +7,7 @@ import com.example.karatdatamobile.Models.*
 import com.example.karatdatamobile.Services.BinaryDataParser
 import com.example.karatdatamobile.Services.BinaryDataProvider
 import com.example.karatdatamobile.Services.ConnectionProviderFactory
+import com.example.karatdatamobile.utils.Lists.addToBegin
 import moxy.MvpPresenter
 import java.util.*
 import javax.inject.Inject
@@ -17,6 +18,7 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
     private var dataBlocks = ArrayList<DataBlock>()
     private var messages = ArrayList<String>()
     private var adapter = TerminalAdapter(messages)
+    private var parsedDataModel = ParsedData()
 
     @Inject
     lateinit var activity: Activity
@@ -64,6 +66,8 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
     private fun readArchives(dataReader: BinaryDataProvider, deviceDataQuery: DeviceDataQuery) {
         val archiveRegisters = ArchivesRegisters().nameToCode
         val config: ArchivesConfig = getArchiveConfig(dataReader)
+        config.titles.addToBegin("Дата")
+        parsedDataModel.setHeaders(config.titles)
         dataReader.write(deviceDataQuery.startDate) // todo
         val archives = HashMap<ArchiveType, java.util.ArrayList<DataBlock>>()
         for (archiveType in deviceDataQuery.archiveTypes) {
@@ -120,7 +124,9 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
     ): HashMap<ArchiveType, String> {
         val result = HashMap<ArchiveType, String>()
         for (archiveType in archives.keys) {
+            parsedDataModel.addArchiveHeader(archiveType.name)
             val parsedArchiveRows = BinaryDataParser.parseArchive(archives[archiveType], config)
+            parsedDataModel.addArchiveRows(recordsToMatrix(parsedArchiveRows))
             result[archiveType] = recordsToString(parsedArchiveRows)
         }
         return result
@@ -136,6 +142,16 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
         return sb.toString()
     }
 
+    private fun recordsToMatrix(parsedArchiveRows: ArrayList<RecordRow>): List<List<String>> {
+        val res: MutableList<List<String>> = mutableListOf()
+        for (row in parsedArchiveRows) {
+            val listRow = mutableListOf<String>()
+            for (data in row.rowArray)
+                listRow.add(data)
+            res.add(listRow)
+        }
+        return res.toList()
+    }
 
     private fun readBlockEventListener(dataBlock: DataBlock) {
         dataBlocks.add(dataBlock)
@@ -150,11 +166,17 @@ class TerminalPresenter @Inject constructor() : MvpPresenter<TerminalView>() {
     }
 
     private fun writeDataBlockToUi(dataBlock: DataBlock) {
+        val type = dataBlock.dataBlockInfo.dataBlockName
         val sb = StringBuilder()
-        sb.append("[Type]: ").append(dataBlock.dataBlockInfo.dataBlockName.name).append("\n")
+        sb.append("[Type]: ").append(type.name).append("\n")
         sb.append("[Raw-data]: ").append(BinaryDataParser.getHexContent(dataBlock.data))
             .append("\n")
         val parsedData = BinaryDataParser.parse(dataBlock)
+        when (type) {
+            DataBlockType.MODEL -> parsedDataModel.setModel(parsedData)
+            DataBlockType.SERIAL_NUMBER -> parsedDataModel.setSerNumber(parsedData)
+            DataBlockType.DATE_TIME -> parsedDataModel.setSystemDate(parsedData)
+        }
         if (parsedData != null) sb.append("[Parsed-data]: ").append(parsedData).append("\n")
         writeToUi(sb.toString())
     }
