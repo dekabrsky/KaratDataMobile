@@ -10,6 +10,7 @@ import com.example.karatdatamobile.models.ParsedData
 import com.example.karatdatamobile.services.ReportBuilder
 import com.example.karatdatamobile.services.TemplateProvider
 import com.example.karatdatamobile.utils.Fields
+import com.example.karatdatamobile.utils.Files.addFileFormat
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import moxy.MvpPresenter
 import javax.inject.Inject
@@ -45,9 +46,9 @@ class TemplaterPresenter @Inject constructor(
         viewState.showDialog()
     }
 
-    fun writeXLS(){
+    fun writeXLS(filename: String){
         viewState.showLoadSign()
-        reportProvider.constructXlsxReport("test.xlsx", "test", typeToValue, parsedData)
+        reportProvider.constructXlsxReport(filename.addFileFormat("xlsx"), "test", typeToValue, parsedData)
 
         viewState.showOnSuccessWrite("Файл записан")
 

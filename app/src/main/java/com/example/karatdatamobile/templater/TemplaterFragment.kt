@@ -11,17 +11,18 @@ import com.example.karatdatamobile.databinding.FragmentTemplaterBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_templater.*
 import kotlinx.android.synthetic.main.fragment_templater.loadSign
-import kotlinx.android.synthetic.main.fragment_terminal.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
 import java.io.Serializable
 
-private const val ARG_PARAM1 = "param1"
+private const val PARSED_DATA = "parsedData"
+private const val FILE_NAME = "fileName"
 
 class TemplaterFragment : MvpAppCompatFragment(), TemplaterView {
     private lateinit var dataFromDevice: ParsedData
+    private lateinit var filename: String
 
     private var _binding: FragmentTemplaterBinding? = null
     private val binding get() = _binding!!
@@ -36,7 +37,8 @@ class TemplaterFragment : MvpAppCompatFragment(), TemplaterView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            dataFromDevice = it.getSerializable(ARG_PARAM1) as ParsedData
+            dataFromDevice = it.getSerializable(PARSED_DATA) as ParsedData
+            filename = it.getString(FILE_NAME).toString()
         }
     }
 
@@ -78,7 +80,7 @@ class TemplaterFragment : MvpAppCompatFragment(), TemplaterView {
         {
             setTitle("Подтверждение")
             setMessage("Записать отчёт?")
-            setPositiveButton("Да") { _, _ -> presenter.writeXLS() }
+            setPositiveButton("Да") { _, _ -> presenter.writeXLS(filename) }
             setNegativeButton("Править") { _, _ -> }
         }
 
@@ -91,10 +93,11 @@ class TemplaterFragment : MvpAppCompatFragment(), TemplaterView {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: Serializable) =
+        fun newInstance(parsedData: Serializable, filename: String) =
             TemplaterFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(ARG_PARAM1, param1)
+                    putSerializable(PARSED_DATA, parsedData)
+                    putString(FILE_NAME, filename)
                 }
             }
     }

@@ -12,7 +12,9 @@ import com.example.karatdatamobile.interfaces.ITemplateProvider
 import com.example.karatdatamobile.models.*
 import com.example.karatdatamobile.services.*
 import com.example.karatdatamobile.templater.TemplaterFragment
+import com.example.karatdatamobile.utils.DateTime.currentDateTimeString
 import com.example.karatdatamobile.utils.Fields
+import com.example.karatdatamobile.utils.Files.addFileFormat
 import com.example.karatdatamobile.utils.Lists.addToBegin
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.google.gson.GsonBuilder
@@ -31,6 +33,7 @@ class TerminalPresenter @Inject constructor(
     private var messages = ArrayList<String>()
     private var adapter = TerminalAdapter(messages)
     private var parsedDataModel = ParsedData()
+    private lateinit var fileName: String
 
     @Inject
     lateinit var activity: Activity
@@ -213,7 +216,8 @@ class TerminalPresenter @Inject constructor(
             val reportProvider: IReportBuilder =
                 ReportBuilder(directory.toString(), directory.toString(), templateProvider)
 
-            FileWriter("${directory.toString()}/${generateFileName("json")}").use { writer ->
+            fileName = generateFileName()
+            FileWriter("${directory.toString()}/${fileName.addFileFormat("json")}").use { writer ->
                 val gson = GsonBuilder().create()
                 gson.toJson(parsedDataModel, writer)
             }
@@ -226,14 +230,13 @@ class TerminalPresenter @Inject constructor(
         }.start()
     }
 
-    fun generateFileName(fileExtension: String): String {
-        return "${parsedDataModel.model[0][0]}_${parsedDataModel.serNumber[0][0]}_${Calendar.getInstance().time}.${fileExtension}"
-    }
+    fun generateFileName(): String =
+        "KАРАT-${parsedDataModel.model[0][0]}-${parsedDataModel.serNumber[0][0]}-${currentDateTimeString()}"
 
     fun makeXLS() {
         viewState.showLoadSign()
         App.application.getRouter()
-            .replaceScreen(FragmentScreen { TemplaterFragment.newInstance(parsedDataModel) })
+            .replaceScreen(FragmentScreen { TemplaterFragment.newInstance(parsedDataModel, fileName) })
     }
 
     fun toReportsList(){
