@@ -117,7 +117,7 @@ class ReportsAdapter constructor(val context: Context, var files: List<ReportRec
 
         App.application.getRouter().navigateTo(FragmentScreen{
             TemplaterFragment.newInstance(
-                ParsedData(data) , files[position].file.name
+                ParsedData(data) , files[position].fileName
             )
         })
     }
