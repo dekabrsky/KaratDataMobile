@@ -26,6 +26,13 @@ class MainActivity: MvpAppCompatActivity() {
         navigator = AppNavigator(this, R.id.main_container)
         cicerone.getNavigatorHolder().setNavigator(navigator)
 
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory",
+            "com.fasterxml.aalto.stax.InputFactoryImpl")
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory",
+            "com.fasterxml.aalto.stax.OutputFactoryImpl")
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory",
+            "com.fasterxml.aalto.stax.EventFactoryImpl")
+
         if (savedInstanceState == null) {
             navigator.applyCommands(arrayOf<Command>(Replace(FragmentScreen { FlowFragment() })))
         }

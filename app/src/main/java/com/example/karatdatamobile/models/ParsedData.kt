@@ -2,12 +2,23 @@ package com.example.karatdatamobile.models
 
 import java.io.Serializable
 
-class ParsedData: Serializable{
+class ParsedData(): Serializable{
     lateinit var model: List<List<String>>
     lateinit var serNumber: List<List<String>>
     lateinit var systemDate: List<List<String>>
     lateinit var headers: List<List<String>>
     var archives: MutableList<List<String>> = mutableListOf()
+
+    constructor(parsedDataDataClass: ParsedDataDataClass?) : this() {
+        if (parsedDataDataClass != null) {
+            model = parsedDataDataClass.model
+            serNumber = parsedDataDataClass.serNumber
+            systemDate = parsedDataDataClass.systemDate
+            headers = parsedDataDataClass.headers
+            archives = parsedDataDataClass.archives
+        }
+
+    }
 
     fun setModel(modelString: String){
         model = modelString.cellWrap()

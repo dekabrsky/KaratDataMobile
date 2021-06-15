@@ -35,12 +35,6 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
             deviceSettings = it.getSerializable(key[1]) as DeviceSettings
             fileName = it.getSerializable(key[2]).toString()
         }
-        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory",
-            "com.fasterxml.aalto.stax.InputFactoryImpl")
-        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory",
-            "com.fasterxml.aalto.stax.OutputFactoryImpl")
-        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory",
-            "com.fasterxml.aalto.stax.EventFactoryImpl")
     }
 
     override fun onCreateView(

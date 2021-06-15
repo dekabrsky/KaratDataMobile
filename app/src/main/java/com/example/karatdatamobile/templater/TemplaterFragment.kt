@@ -15,7 +15,6 @@ import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import toothpick.Toothpick
-import java.io.Serializable
 
 private const val PARSED_DATA = "parsedData"
 private const val FILE_NAME = "fileName"
@@ -93,7 +92,7 @@ class TemplaterFragment : MvpAppCompatFragment(), TemplaterView {
 
     companion object {
         @JvmStatic
-        fun newInstance(parsedData: Serializable, filename: String) =
+        fun newInstance(parsedData: ParsedData?, filename: String) =
             TemplaterFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(PARSED_DATA, parsedData)

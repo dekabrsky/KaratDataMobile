@@ -5,10 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.beust.klaxon.JsonReader
+import com.beust.klaxon.Klaxon
+import com.example.karatdatamobile.App
 import com.example.karatdatamobile.R
+import com.example.karatdatamobile.models.ParsedData
+import com.example.karatdatamobile.models.ParsedDataDataClass
+import com.example.karatdatamobile.templater.TemplaterFragment
+import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.google.android.material.textview.MaterialTextView
+import com.google.gson.Gson
+import java.io.FileReader
+import java.io.Reader
 
-class ReportsAdapter constructor(context: Context, var files: List<ReportRecordModel>) :
+class ReportsAdapter constructor(val context: Context, var files: List<ReportRecordModel>) :
     RecyclerView.Adapter<ReportsAdapter.ReportsViewHolder>() {
 
     var isMenuShoved = false
@@ -20,6 +30,8 @@ class ReportsAdapter constructor(context: Context, var files: List<ReportRecordM
         var editReport: MaterialTextView = itemView.findViewById(R.id.editReport)
         var deleteReport: MaterialTextView = itemView.findViewById(R.id.deleteReport)
         var lastModified: MaterialTextView = itemView.findViewById(R.id.lastModified)
+
+
     }
 
 
@@ -48,6 +60,21 @@ class ReportsAdapter constructor(context: Context, var files: List<ReportRecordM
                 isMenuShoved = true
             }
         }
+
+        val gson = Gson()
+
+        val stringFromFile = files[position].file.readText()
+
+        val data = gson.fromJson(stringFromFile, ParsedDataDataClass::class.java)
+
+        holder.formatXLSX.setOnClickListener {
+            App.application.getRouter().navigateTo(FragmentScreen{
+                TemplaterFragment.newInstance(
+                    ParsedData(data) , files[position].fileName
+                )
+            })
+        }
+
     }
 
     override fun getItemCount(): Int {
