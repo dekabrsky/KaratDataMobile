@@ -30,6 +30,12 @@ class ReportsPresenter @Inject constructor(
     }
 
     private fun getFileNames(files: List<File>): List<ReportRecordModel>{
-        return files.map { ReportRecordModel(it.name, Date(it.lastModified()), it) }
+        return files.map {
+            ReportRecordModel(
+                it.name.replace(".json", ""),
+                Date(it.lastModified()),
+                it
+            )
+        }
     }
 }

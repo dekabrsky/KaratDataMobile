@@ -1,21 +1,31 @@
 package com.example.karatdatamobile.reports
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.karatdatamobile.App
 import com.example.karatdatamobile.R
+import com.example.karatdatamobile.interfaces.IReportBuilder
+import com.example.karatdatamobile.interfaces.ITemplateProvider
 import com.example.karatdatamobile.models.ParsedData
 import com.example.karatdatamobile.models.ParsedDataDataClass
+import com.example.karatdatamobile.services.ReportBuilder
+import com.example.karatdatamobile.services.TemplateProvider
 import com.example.karatdatamobile.templater.TemplaterFragment
 import com.example.karatdatamobile.utils.DateTime.toSimpleDateTime
+import com.example.karatdatamobile.utils.Fields
+import com.example.karatdatamobile.utils.Files.addFileFormat
 import com.example.karatdatamobile.utils.Views.hide
 import com.example.karatdatamobile.utils.Views.show
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.google.android.material.textview.MaterialTextView
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import java.io.FileWriter
+import java.util.HashMap
 
 class ReportsAdapter constructor(val context: Context, var files: List<ReportRecordModel>) :
     RecyclerView.Adapter<ReportsAdapter.ReportsViewHolder>() {
@@ -53,6 +63,8 @@ class ReportsAdapter constructor(val context: Context, var files: List<ReportRec
 
         holder.formatXLSX.setOnClickListener { onCreateXLSClick(holder, position) }
 
+        holder.formatCSV.setOnClickListener { onCreateCSVClick(holder, position) }
+
         holder.shareReport.setOnClickListener { isShareShowed = onShareClick(holder, isShareShowed) }
     }
 
@@ -83,11 +95,34 @@ class ReportsAdapter constructor(val context: Context, var files: List<ReportRec
 
         App.application.getRouter().navigateTo(FragmentScreen{
             TemplaterFragment.newInstance(
-                ParsedData(data) , files[position].fileName
+                ParsedData(data) , files[position].file.name
             )
         })
+    }
 
+    private fun onCreateCSVClick(holder: ReportsViewHolder, position: Int) {
+        val gson = Gson()
+        val stringFromFile = files[position].file.readText()
+        val data = gson.fromJson(stringFromFile, ParsedDataDataClass::class.java)
+        val res = context.resources
+        val cw = ContextWrapper(context)
+        val directory = cw.getExternalFilesDir("Karat")
+        val parsedData = HashMap<String, List<List<String>>>()
+        val parsedDataModel = ParsedData(data)
+        parsedData[Fields.DATA] = parsedDataModel.archives
+        parsedData[Fields.MODEL] = parsedDataModel.model
+        parsedData[Fields.HEADER] = parsedDataModel.headers
+        parsedData[Fields.DATE_TIME] = parsedDataModel.systemDate
+        parsedData[Fields.SERIAL_NUMBER] = parsedDataModel.serNumber
+        val templateProvider: ITemplateProvider = TemplateProvider(res)
+        val reportProvider: IReportBuilder =
+            ReportBuilder(directory.toString(), directory.toString(), templateProvider)
 
+        try {
+            reportProvider.constructCsvReport(files[position].fileName, parsedData)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun onShareClick(holder: ReportsViewHolder, isShareShowed: Boolean) : Boolean =
