@@ -20,12 +20,12 @@
             style="@style/Widget.MaterialComponents.TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="28dp"
             android:singleLine="true"
             android:text="Название файла"
             android:textColor="@color/c_text_light"
-            android:textSize="18sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@id/chevron"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +39,7 @@
             android:singleLine="true"
             android:text="Дата создания"
             android:textColor="@color/с_turquoise"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/reportName" />
 
@@ -63,13 +63,14 @@
         style="@style/Widget.MaterialComponents.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/appbar_padding_top"
+        android:layout_marginBottom="@dimen/appbar_padding_top"
         android:paddingHorizontal="16dp"
         android:singleLine="true"
         android:text="Сформировать Excel файл"
         android:textColor="@color/c_text_light"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:visibility="gone"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reportBlock"
         tools:visibility="visible" />
@@ -86,8 +87,10 @@
         android:textColor="@color/с_turquoise"
         android:textSize="14sp"
         android:visibility="gone"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toEndOf="@+id/formatXLSX"
         app:layout_constraintTop_toTopOf="@+id/formatXLSX"
+        app:layout_constraintBottom_toBottomOf="@+id/formatXLSX"
         tools:visibility="visible" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -100,8 +103,9 @@
         android:singleLine="true"
         android:text="Сформировать CSV файл"
         android:textColor="@color/c_text_light"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:visibility="gone"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/formatXLSX"
         tools:visibility="visible" />
@@ -110,6 +114,7 @@
         android:id="@+id/shareBlock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/formatCSV">
 
@@ -123,8 +128,9 @@
             android:singleLine="true"
             android:text="Отправить отчет"
             android:textColor="@color/c_text_light"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:visibility="gone"
+            android:background="?android:attr/selectableItemBackground"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
@@ -140,8 +146,9 @@
             android:singleLine="true"
             android:text="Excel"
             android:textColor="@color/с_turquoise"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:visibility="gone"
+            android:background="?android:attr/selectableItemBackground"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shareReport"
             tools:visibility="visible" />
@@ -156,8 +163,9 @@
             android:paddingHorizontal="16dp"
             android:singleLine="true"
             android:text="CSV"
+            android:background="?android:attr/selectableItemBackground"
             android:textColor="@color/с_turquoise"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/shareXLS"
@@ -175,8 +183,9 @@
         android:singleLine="true"
         android:text="Удалить отчет"
         android:textColor="@color/c_text_light"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:visibility="gone"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shareBlock"
         tools:visibility="visible" />
