@@ -42,7 +42,13 @@ class TerminalPresenter @Inject constructor(
         return adapter
     }
 
-    fun startReadData(appSettings: DeviceSettings, deviceDataQuery: DeviceDataQuery) {
+    fun startReadData(appSettings: DeviceSettings,
+                      deviceDataQuery: DeviceDataQuery,
+                      userFileName: String
+    ) {
+        fileName =
+            if (userFileName.isNotEmpty()) userFileName
+            else ""
         Thread {
             val connectionProvider = ConnectionProviderFactory.Create(appSettings)
             val binaryDataProvider = BinaryDataProvider(connectionProvider)
@@ -216,7 +222,8 @@ class TerminalPresenter @Inject constructor(
             val reportProvider: IReportBuilder =
                 ReportBuilder(directory.toString(), directory.toString(), templateProvider)
 
-            fileName = generateFileName()
+            if (fileName.isEmpty())
+                fileName = generateFileName()
             FileWriter("${directory.toString()}/${fileName.addFileFormat("json")}").use { writer ->
                 val gson = GsonBuilder().create()
                 gson.toJson(parsedDataModel, writer)

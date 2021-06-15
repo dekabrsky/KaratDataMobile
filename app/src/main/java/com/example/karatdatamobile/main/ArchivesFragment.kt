@@ -60,21 +60,13 @@ class ArchivesFragment : MvpAppCompatFragment(), ArchivesView {
             presenter.loadSaved()
         else presenter.loadSaved(settings!!)
 
-        binding.editTextSetting.setOnClickListener {
-            showSettingsScreen()
-        }
+        binding.editTextSetting.setOnClickListener { showSettingsScreen() }
 
-        binding.imgSetting.setOnClickListener {
-            showSettingsScreen()
-        }
+        binding.imgSetting.setOnClickListener { showSettingsScreen() }
 
-        binding.editTextDate.setOnClickListener {
-            presenter.onDateClick()
-        }
+        binding.editTextDate.setOnClickListener { presenter.onDateClick() }
 
-        binding.imgData.setOnClickListener {
-            presenter.onDateClick()
-        }
+        binding.imgData.setOnClickListener { presenter.onDateClick() }
 
         mDateSetListener = OnDateSetListener { _, year, month, day ->
             presenter.onDateChanged(year, month, day)
@@ -84,7 +76,8 @@ class ArchivesFragment : MvpAppCompatFragment(), ArchivesView {
             presenter.proceed(
                 spinner.selectedItem.toString(),
                 getArchivesType() as ArrayList<ArchiveType>,
-                getDeviceSettings()
+                getDeviceSettings(),
+                binding.editTextName.text.toString()
             )
         }
     }
@@ -143,9 +136,8 @@ class ArchivesFragment : MvpAppCompatFragment(), ArchivesView {
     override fun showArchivesError() =
         Snackbar.make(requireView(), "Архивы не выбраны", Snackbar.LENGTH_LONG).show()
 
-    override fun showSettingsError() {
+    override fun showSettingsError() =
         Snackbar.make(requireView(), "Настройки не настроены", Snackbar.LENGTH_LONG).show()
-    }
 
     companion object {
         @JvmStatic

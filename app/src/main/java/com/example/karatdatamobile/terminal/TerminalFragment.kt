@@ -19,6 +19,7 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
 
     private lateinit var deviceDataQuery: DeviceDataQuery
     private lateinit var deviceSettings: DeviceSettings
+    private lateinit var fileName: String
 
     @InjectPresenter
     lateinit var presenter: TerminalPresenter
@@ -32,6 +33,7 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
         arguments?.let {
             deviceDataQuery = it.getSerializable(key[0]) as DeviceDataQuery
             deviceSettings = it.getSerializable(key[1]) as DeviceSettings
+            fileName = it.getSerializable(key[2]).toString()
         }
         System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory",
             "com.fasterxml.aalto.stax.InputFactoryImpl")
@@ -71,7 +73,11 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
     private fun startReadData() {
         deactivateButtons()
         showLoadSign()
-        presenter.startReadData(deviceSettings, deviceDataQuery)
+        presenter.startReadData(
+            deviceSettings,
+            deviceDataQuery,
+            fileName
+        )
     }
 
     private fun deactivateButtons(){
@@ -93,14 +99,15 @@ class TerminalFragment @Inject constructor(): MvpAppCompatFragment(), TerminalVi
     }
 
     companion object {
-        private val key = arrayListOf("DeviceDataQuery", "DeviceSettings")
+        private val key = arrayListOf("DeviceDataQuery", "DeviceSettings", "Filename")
 
         @JvmStatic
-        fun newInstance(param1: DeviceDataQuery, param2: DeviceSettings) =
+        fun newInstance(query: DeviceDataQuery, settings: DeviceSettings, fileName: String) =
             TerminalFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(key[0], param1)
-                    putSerializable(key[1], param2)
+                    putSerializable(key[0], query)
+                    putSerializable(key[1], settings)
+                    putString(key[2], fileName)
             }
         }
     }

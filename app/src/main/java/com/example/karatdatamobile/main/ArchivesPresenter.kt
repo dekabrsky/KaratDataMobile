@@ -88,7 +88,8 @@ class ArchivesPresenter @Inject constructor(
     fun proceed(
         deviceType: String,
         archiveTypes: ArrayList<ArchiveType>,
-        settings: DeviceSettings?
+        settings: DeviceSettings?,
+        filename: String
     ) {
         if (date == null){
             viewState.showDateError()
@@ -105,7 +106,7 @@ class ArchivesPresenter @Inject constructor(
         query = DeviceDataQuery(deviceType, date, archiveTypes)
         App.application.getRouter()
             .navigateTo(FragmentScreen {
-                TerminalFragment.newInstance(query, settings)
+                TerminalFragment.newInstance(query, settings, filename)
             }
         )
     }
