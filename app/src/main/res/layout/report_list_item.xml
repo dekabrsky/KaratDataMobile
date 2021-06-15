@@ -126,7 +126,7 @@
             android:layout_marginVertical="@dimen/appbar_padding_top"
             android:paddingHorizontal="16dp"
             android:singleLine="true"
-            android:text="Отправить отчет"
+            android:text="Открыть отчет"
             android:textColor="@color/c_text_light"
             android:textSize="16sp"
             android:visibility="gone"
