@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.karatdatamobile.models.DeviceSettings
 import com.example.karatdatamobile.models.TabsNames
+import com.example.karatdatamobile.reports.ReportsFragment
 
 
 class KaratFragmentStateAdapter(

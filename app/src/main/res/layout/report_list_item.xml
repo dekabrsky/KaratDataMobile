@@ -2,27 +2,88 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/report"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/reportName"
+        style="@style/Widget.MaterialComponents.TextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Сформированный отчёт"
+        android:layout_height="50dp"
+        android:text="Название файла"
         android:textColor="@color/c_text_light"
         android:textSize="18sp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:singleLine="true"/>
 
-    <TextView
-        android:id="@+id/format"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/lastModified"
+        style="@style/Widget.MaterialComponents.TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Формат отчёта"
+        android:text="Дата создания"
+        android:textColor="@color/c_text_light"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reportName"
+        android:singleLine="true"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/formatXLSX"
+        style="@style/Widget.MaterialComponents.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Сформировать Excel файл"
         android:textColor="@color/с_turquoise"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/report"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/lastModified"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:singleLine="true"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/formatCSV"
+        style="@style/Widget.MaterialComponents.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Сформировать CSV файл"
+        android:textColor="@color/с_turquoise"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/formatXLSX"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:singleLine="true"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/editReport"
+        style="@style/Widget.MaterialComponents.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Редкактировать отчет"
+        android:textColor="@color/с_turquoise"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/formatCSV"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:singleLine="true"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/deleteReport"
+        style="@style/Widget.MaterialComponents.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Удалить отчет"
+        android:textColor="@color/с_turquoise"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/editReport"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        android:singleLine="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

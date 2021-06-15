@@ -21,7 +21,7 @@ import kotlin.collections.ArrayList
 
 
 @InjectViewState
-class ArchivesPresenter @Inject constructor(
+class  ArchivesPresenter @Inject constructor(
     private val context: Context
 ): MvpPresenter<ArchivesView>() {
     private lateinit var query: DeviceDataQuery
@@ -41,8 +41,7 @@ class ArchivesPresenter @Inject constructor(
 
     fun getSettingsFromPrefs(): DeviceSettings? {
         prefs = context.getSharedPreferences(Prefs.DEVICE_SETTINGS, Context.MODE_PRIVATE)
-        val mode = ConnectionMode.valueOf(prefs.getOrDefault(Prefs.MODE, "NONE"))
-        return when (mode){
+        return when (val mode = ConnectionMode.valueOf(prefs.getOrDefault(Prefs.MODE, "NONE"))){
             ConnectionMode.NONE -> return null
             ConnectionMode.TCP -> DeviceSettings(
                 mode,
