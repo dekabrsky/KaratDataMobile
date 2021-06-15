@@ -13,6 +13,7 @@ import com.example.karatdatamobile.models.*
 import com.example.karatdatamobile.services.*
 import com.example.karatdatamobile.templater.TemplaterFragment
 import com.example.karatdatamobile.utils.DateTime.currentDateTimeString
+import com.example.karatdatamobile.utils.Extensions
 import com.example.karatdatamobile.utils.Fields
 import com.example.karatdatamobile.utils.Files.addFileFormat
 import com.example.karatdatamobile.utils.Lists.addToBegin
@@ -224,7 +225,7 @@ class TerminalPresenter @Inject constructor(
 
             if (fileName.isEmpty())
                 fileName = generateFileName()
-            FileWriter("${directory.toString()}/${fileName.addFileFormat("json")}").use { writer ->
+            FileWriter("${directory.toString()}/${fileName.addFileFormat(Extensions.JSON)}").use { writer ->
                 val gson = GsonBuilder().create()
                 gson.toJson(parsedDataModel, writer)
             }

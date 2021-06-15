@@ -5,5 +5,5 @@ import android.content.ContextWrapper
 import javax.inject.Inject
 
 object Files {
-    fun String.addFileFormat(format: String) = "${this}.${format}"
+    fun String.addFileFormat(format: String) = "${this}${format}"
 }
