@@ -11,4 +11,16 @@ object DateTime {
         val dateFormat = SimpleDateFormat("dd.MM.yyyy-HH.mm")
         return dateFormat.format(currentTime)
     }
+
+    @SuppressLint("SimpleDateFormat")
+    fun Date.toSimpleDate(): String{
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy")
+        return dateFormat.format(this)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun Date.toSimpleDateTime(): String{
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm")
+        return dateFormat.format(this)
+    }
 }
