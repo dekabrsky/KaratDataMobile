@@ -162,14 +162,12 @@ class ReportsAdapter constructor(val context: Context, var files: List<ReportRec
             "com.example.karatdatamobile.fileprovider",
             file
         )
-        val fileIntent = Intent(Intent.ACTION_SEND)
-        if (ext == Extensions.XLSX)
-            fileIntent.type = "application/x-excel"
-        else fileIntent.type = "text/csv"
+        val fileIntent = Intent(Intent.ACTION_VIEW)
+        fileIntent.type = "application/vnd.ms-excel"
+        fileIntent.data = path
         fileIntent.putExtra(Intent.EXTRA_SUBJECT, "Архив ${files[position].fileName}${ext}")
         fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         fileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        fileIntent.putExtra(Intent.EXTRA_STREAM, path)
         startActivity(context, fileIntent, fileIntent.extras)
     }
 
