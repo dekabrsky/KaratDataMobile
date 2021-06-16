@@ -16,7 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.karatdatamobile.Enums.ConnectionMode;
+import com.example.karatdatamobile.enums.ConnectionMode;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -37,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_settings_old);
 
         sharedSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 

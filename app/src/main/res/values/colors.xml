@@ -8,4 +8,26 @@
     <color name="Gainsboro">#DCDCDC</color>
     <color name="transparent">#00DCDCDC</color>
     <color name="hint">#80F5F5F5</color>
+
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="c_toolbar">#0C3549</color>
+    <color name="c_label">#747D7A</color>
+    <color name="c_grey_blue">#ADB8B7</color>
+    <color name="c_light_turquoise">#80B9B3</color>
+    <color name="c_input_text">#B9BEBC</color>
+    <color name="c_light_mint">#F2FBFA</color>
+    <color name="c_white">#FFFFFF</color>
+    <color name="с_turquoise">#24746B</color>
+    <color name="c_text_light">#797979</color>
+    <color name="c_background_dark">#061821</color>
+    <color name="c_text_dark">#E9F2F1</color>
+    <color name="c_tablable_dark">#0B4866</color>
+    <color name="c_turquoise_light">#67A09A</color>
 </resources>

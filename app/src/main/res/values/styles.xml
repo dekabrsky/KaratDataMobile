@@ -15,7 +15,7 @@
     <item name="android:weekNumberColor">@color/color</item>
     <item name="android:headerYearTextAppearance">@color/color</item>
 </style>
-    <style name="CheckboxStyle" parent="AppTheme">
+    <style name="CheckboxStyle1" parent="AppTheme">
         <item name="colorControlActivated">@color/colorAccent</item>
         <item name="colorControlNormal">@color/color</item>
     </style>

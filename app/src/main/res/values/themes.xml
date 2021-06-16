@@ -1,0 +1,55 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.KARATDATA" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/c_toolbar</item>
+        <item name="colorPrimaryVariant">@color/c_background_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:colorBackgroundCacheHint">@color/c_input_text</item>
+        <item name="android:textColorHint">@color/c_label</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.KARATDATA.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.KARATDATA.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.KARATDATA.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CheckboxStyle" parent="Theme.KARATDATA">
+        <item name="colorControlActivated">@color/с_turquoise</item>
+        <item name="colorControlNormal">@color/c_turquoise_light</item>
+    </style>
+
+    <style name="RadioButton" parent="Theme.KARATDATA">
+        <item name="colorControlActivated">@color/с_turquoise</item>
+        <item name="colorControlNormal">@color/c_label</item>
+        <item name="android:textColor">@color/c_text_light</item>
+    </style>
+
+    <style name="CalendarDatePickerDialog1"  parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/c_light_turquoise</item>
+        <item name="android:textColorPrimary">@color/c_label</item>
+        <item name="android:colorAccent">@color/c_toolbar</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerTheme.ButtonBarNegativeButtonStyle</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerTheme.ButtonBarPositiveButtonStyle</item>
+    </style>
+
+    <style name="DatePickerTheme.ButtonBarNegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/c_toolbar</item>
+    </style>
+
+    <style name="DatePickerTheme.ButtonBarPositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/c_toolbar</item>
+    </style>
+
+    <style name="spinnerTheme">
+        <item name="android:textColor">@color/c_text_light</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+</resources>

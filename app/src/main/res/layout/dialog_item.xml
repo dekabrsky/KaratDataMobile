@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/openDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Открыть"
+        android:textColor="@color/c_label"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/editDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Редактировать"
+        android:textColor="@color/c_label"
+        app:layout_constraintTop_toBottomOf="@id/openDialog"
+        tools:ignore="MissingConstraints"/>
+
+    <TextView
+        android:id="@+id/shareDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Поделиться"
+        android:textColor="@color/c_label"
+        app:layout_constraintTop_toBottomOf="@id/editDialog"
+        tools:ignore="MissingConstraints"/>
+</LinearLayout>
